@@ -1,0 +1,166 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Order {{ order()?.order_id }}</h1>
+      <p class="text-sm text-gray-500 mt-1">Order details and status</p>
+    </div>
+    <a
+      routerLink="/orders"
+      class="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+      Back to Orders
+    </a>
+  </div>
+
+  @if (order(); as o) {
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Order Timeline</h2>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center gap-4 mb-6">
+              <span
+                [class]="getStatusBgClass(o.status)"
+                class="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+              >
+                <svg
+                  class="w-5 h-5 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </span>
+              <div>
+                <p class="text-sm font-semibold text-gray-900">
+                  {{ orderService.getStatusName(o.status) }}
+                </p>
+                <p class="text-xs text-gray-500">{{ o.date }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-900">Items ({{ o.items }})</h2>
+          </div>
+          <div class="divide-y divide-gray-100">
+            @for (item of orderItems(); track item.id) {
+              <div class="p-4 flex items-center gap-4">
+                <div
+                  class="w-12 h-12 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center shrink-0"
+                >
+                  <span class="text-xs font-bold text-indigo-700">{{
+                    item.product_name.substring(0, 2)
+                  }}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-medium text-gray-900">{{ item.product_name }}</p>
+                  <p class="text-xs text-gray-500">{{ item.product_brand }}</p>
+                </div>
+                <div class="text-right">
+                  <p class="text-sm font-semibold text-gray-900">\${{ item.price }}</p>
+                  <p class="text-xs text-gray-500">Qty: 1</p>
+                </div>
+              </div>
+            }
+          </div>
+          <div class="p-4 bg-gray-50 border-t border-gray-200 flex items-center justify-between">
+            <span class="text-sm font-medium text-gray-700">Total</span>
+            <span class="text-lg font-bold text-gray-900">\${{ o.total.toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-6">
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Customer</h2>
+          <div class="space-y-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center">
+                <span class="text-sm font-bold text-indigo-700">{{ o.customer.charAt(0) }}</span>
+              </div>
+              <div>
+                <p class="text-sm font-medium text-gray-900">{{ o.customer }}</p>
+                <p class="text-xs text-gray-500">{{ o.customer_email }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Info</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Payment Method</span>
+              <span class="text-sm font-medium text-gray-900">{{ o.payment }}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Status</span>
+              <span
+                [class]="getStatusBadgeClass(o.status)"
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize"
+              >
+                {{ orderService.getStatusName(o.status) }}
+              </span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Date</span>
+              <span class="text-sm font-medium text-gray-900">{{ o.date }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 p-6">
+          <h2 class="text-lg font-semibold text-gray-900 mb-4">Summary</h2>
+          <div class="space-y-3">
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Subtotal</span>
+              <span class="text-sm font-medium text-gray-900"
+                >\${{ (o.total * 0.85).toFixed(2) }}</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Shipping</span>
+              <span class="text-sm font-medium text-gray-900"
+                >\${{ (o.total * 0.05).toFixed(2) }}</span
+              >
+            </div>
+            <div class="flex justify-between">
+              <span class="text-sm text-gray-500">Tax</span>
+              <span class="text-sm font-medium text-gray-900"
+                >\${{ (o.total * 0.1).toFixed(2) }}</span
+              >
+            </div>
+            <hr class="border-gray-200" />
+            <div class="flex justify-between">
+              <span class="text-sm font-semibold text-gray-900">Total</span>
+              <span class="text-sm font-bold text-gray-900">\${{ o.total.toFixed(2) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="bg-white rounded-xl border border-gray-200 p-12 text-center">
+      <p class="text-gray-500">Order not found</p>
+    </div>
+  }
+</div>

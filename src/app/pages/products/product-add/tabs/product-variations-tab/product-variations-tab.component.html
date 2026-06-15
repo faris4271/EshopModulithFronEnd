@@ -1,0 +1,358 @@
+<div [formGroup]="formService.getSubGroup('variations')" class="space-y-5">
+  <h2 class="text-lg font-semibold text-gray-900 mb-4">Product Variations</h2>
+
+  <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+    <div class="flex items-center gap-4 mb-4">
+      <label class="text-sm font-medium text-gray-700">Available Options</label>
+      <select
+        (change)="onOptionSelect($event)"
+        class="flex-1 max-w-xs text-sm border border-gray-300 rounded-lg px-3 py-2"
+      >
+        <option value="">Select an option...</option>
+        @for (opt of availableOptions(); track opt.id) {
+          <option [value]="opt.id">{{ opt.name }}</option>
+        }
+      </select>
+    </div>
+
+    @if (formService.options.length > 0) {
+      <div class="space-y-3">
+        @if (headerOptions().length > 0) {
+          <div class="p-3 bg-indigo-50 border border-indigo-100 rounded-lg mb-4">
+            <div class="flex items-center gap-2 mb-2">
+              <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span class="text-sm font-semibold text-indigo-900">Assigned Option Headers</span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              @for (header of headerOptions(); track header.name) {
+                <span class="px-2 py-1 bg-white border border-indigo-200 text-indigo-700 text-xs rounded-md shadow-sm">
+                  {{ header.name }}
+                </span>
+              }
+            </div>
+          </div>
+        }
+        @for (opt of formService.options.controls; track $index; let oi = $index) {
+          <div
+            [formGroupName]="oi"
+            class="flex items-center gap-3 p-3 bg-white rounded-lg border border-gray-200"
+          >
+            <div class="flex-1">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="text-sm font-medium text-gray-800">{{
+                  opt.get('name')?.value
+                }}</span>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                @for (
+                  val of formService.getOptionValuesForm(oi).controls;
+                  track $index;
+                  let vi = $index
+                ) {
+                  <div
+                    [formGroupName]="vi"
+                    class="flex items-center gap-1 px-2 py-1 bg-indigo-50 text-indigo-700 rounded text-sm"
+                  >
+                    <span>{{ val.get('name')?.value }}</span>
+                    <button
+                      type="button"
+                      (click)="formService.removeOptionValue(oi, vi)"
+                      class="w-4 h-4 flex items-center justify-center hover:bg-indigo-200 rounded"
+                    >
+                      <svg
+                        class="w-3 h-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                }
+                @if (formService.getOptionValuesForm(oi).controls.length === 0) {
+                  <span class="inline-flex items-center px-2 py-1 rounded text-xs bg-indigo-50 text-indigo-600 border border-indigo-100 font-medium">
+                    Header
+                  </span>
+                }
+                <div class="flex items-center gap-1">
+                  <input #valInput type="text" class="w-24 px-2 py-1 border border-gray-300 rounded text-xs"
+                    placeholder="Enter value" (keydown.enter)="addOptionValueFromInput(oi, valInput.value); valInput.value = ''" />
+                  <button type="button" (click)="addOptionValueFromInput(oi, valInput.value); valInput.value = ''"
+                    class="text-xs text-indigo-600 hover:text-indigo-800 font-medium">
+                    + Add
+                  </button>
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              (click)="formService.removeOption(oi)"
+              class="px-3 py-1.5 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
+              Delete Option
+            </button>
+          </div>
+        }
+      </div>
+    }
+
+    <div class="flex gap-3 mt-4 pt-4 border-t border-gray-200">
+      <button
+        type="button"
+        (click)="formService.generateVariations()"
+        [disabled]="formService.options.length === 0"
+        class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Generate Combinations
+      </button>
+      <button
+        type="button"
+        (click)="formService.variations.clear()"
+        [disabled]="formService.variations.length === 0"
+        class="px-4 py-2 text-sm border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Clear All
+      </button>
+    </div>
+  </div>
+
+  @if (formService.variations.length > 0) {
+    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">Option Combinations</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">SKU</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">GTIN</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">Price</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">Old Price</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">Thumbnail</th>
+            <th class="px-4 py-3 text-left font-medium text-gray-700">Images</th>
+            <th class="px-4 py-3 text-center font-medium text-gray-700">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @for (variation of formService.variations.controls; track $index; let vi = $index) {
+            <tr [formGroupName]="vi" class="hover:bg-gray-50">
+              <td class="px-4 py-3">
+                <div class="flex flex-wrap gap-1">
+                  @for (
+                    comb of formService.getVariationOptionCombinations(vi).controls;
+                    track $index;
+                    let ci = $index
+                  ) {
+                    <div
+                      [formGroupName]="ci"
+                      class="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 rounded text-xs"
+                    >
+                      <span class="font-medium text-gray-600"
+                        >{{ comb.get('optionName')?.value }}:</span
+                      >
+                      <span class="text-gray-800">{{ comb.get('value')?.value }}</span>
+                    </div>
+                  }
+                </div>
+                <input type="hidden" formControlName="name" />
+                <input type="hidden" formControlName="normalizedName" />
+              </td>
+              <td class="px-4 py-3">
+                <input
+                  type="text"
+                  formControlName="sku"
+                  class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="SKU"
+                />
+              </td>
+              <td class="px-4 py-3">
+                <input
+                  type="text"
+                  formControlName="gtin"
+                  class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="GTIN"
+                />
+              </td>
+              <td class="px-4 py-3">
+                <input
+                  type="number"
+                  formControlName="price"
+                  min="0"
+                  step="0.01"
+                  class="w-20 px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="0.00"
+                />
+              </td>
+              <td class="px-4 py-3">
+                <input
+                  type="number"
+                  formControlName="oldPrice"
+                  min="0"
+                  step="0.01"
+                  class="w-20 px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                  placeholder="0.00"
+                />
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-2">
+                  @if (formService.variationThumbnailPreviews().get(vi)) {
+                    <div
+                      class="relative w-12 h-12 rounded overflow-hidden border border-gray-200"
+                    >
+                      <img
+                        [src]="formService.variationThumbnailPreviews().get(vi)"
+                        class="w-full h-full object-cover"
+                        alt="Thumbnail"
+                      />
+                      <button
+                        type="button"
+                        (click)="formService.removeVariationThumbnail(vi)"
+                        class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  }
+                  <label class="cursor-pointer text-gray-400 hover:text-gray-600">
+                    <svg
+                      class="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    <input
+                      type="file"
+                      (change)="onVariationThumbnailChange(vi, $event)"
+                      accept="image/*"
+                      class="hidden"
+                    />
+                  </label>
+                </div>
+              </td>
+              <td class="px-4 py-3">
+                <div class="flex items-center gap-1">
+                  @for (
+                    img of formService.variationImagePreviews().get(vi);
+                    track $index;
+                    let imgIdx = $index
+                  ) {
+                    <div
+                      class="relative w-10 h-10 rounded overflow-hidden border border-gray-200"
+                    >
+                      <img [src]="img" class="w-full h-full object-cover" alt="Image" />
+                      <button
+                        type="button"
+                        (click)="formService.removeVariationImage(vi, imgIdx)"
+                        class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white rounded-full text-xs flex items-center justify-center"
+                      >
+                        &times;
+                      </button>
+                    </div>
+                  }
+                  <label class="cursor-pointer text-gray-400 hover:text-gray-600">
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                    <input
+                      type="file"
+                      (change)="onVariationImagesChange(vi, $event)"
+                      accept="image/*"
+                      multiple
+                      class="hidden"
+                    />
+                  </label>
+                </div>
+              </td>
+              <td class="px-4 py-3 text-center">
+                <div class="flex items-center justify-center gap-1">
+                  <button
+                    type="button"
+                    (click)="formService.addVariation()"
+                    class="p-1.5 text-green-600 hover:bg-green-50 rounded"
+                    title="Add manual row"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 4v16m8-8H4"
+                      />
+                    </svg>
+                  </button>
+                  <button
+                    type="button"
+                    (click)="formService.removeVariation(vi)"
+                    class="p-1.5 text-red-500 hover:bg-red-50 rounded"
+                    title="Remove"
+                  >
+                    <svg
+                      class="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else {
+    <div
+      class="text-center py-12 text-gray-400 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200"
+    >
+      <svg
+        class="w-12 h-12 mx-auto mb-3"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M4 6h16M4 12h16M4 18h16"
+        />
+      </svg>
+      <p class="text-sm">Add options and generate combinations to create variations.</p>
+    </div>
+  }
+</div>

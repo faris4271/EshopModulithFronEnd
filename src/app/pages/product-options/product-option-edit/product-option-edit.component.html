@@ -1,0 +1,126 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Edit Product Option</h1>
+      <p class="text-sm text-gray-500 mt-1">Update product option information</p>
+    </div>
+    <a
+      routerLink="/product-options"
+      class="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M10 19l-7-7m0 0l7-7m-7 7h18"
+        />
+      </svg>
+      Back
+    </a>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+      {{ errorMessage() }}
+    </div>
+  }
+
+  @if (optionNotFound()) {
+    <div class="bg-white rounded-xl border border-gray-200 p-12 text-center">
+      <svg
+        class="w-16 h-16 mx-auto text-gray-300 mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.5"
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <h2 class="text-lg font-semibold text-gray-900 mb-1">Option Not Found</h2>
+      <p class="text-sm text-gray-500 mb-4">
+        The product option you are looking for does not exist.
+      </p>
+      <a
+        routerLink="/product-options"
+        class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+      >
+        Back to Options
+      </a>
+    </div>
+  } @else {
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="bg-white rounded-xl border border-gray-200 p-6"
+    >
+      <div class="space-y-5">
+        <h2 class="text-lg font-semibold text-gray-900 mb-2">Option Information</h2>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Option Name <span class="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              formControlName="name"
+              class="w-full px-4 py-2.5 rounded-lg border text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              [class.border-red-400]="isFieldInvalid('name')"
+              placeholder="e.g., Color, Size, Material"
+            />
+            @if (isFieldInvalid('name')) {
+              <p class="mt-1 text-xs text-red-500">{{ getErrorMessage('name') }}</p>
+            }
+          </div>
+
+          <div class="pt-2">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+          <div class="flex gap-4">
+            <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="status"
+                [value]="1"
+                class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              />
+              Active
+            </label>
+            <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+              <input
+                type="radio"
+                formControlName="status"
+                [value]="0"
+                class="w-4 h-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"
+              />
+              Inactive
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex gap-3 mt-8 pt-6 border-t border-gray-200">
+        <button
+          type="submit"
+          [disabled]="isSubmitting()"
+          class="flex-1 px-6 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          @if (isSubmitting()) {
+            Saving...
+          } @else {
+            Update Option
+          }
+        </button>
+        <a
+          routerLink="/product-options"
+          class="px-6 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors text-center"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  }
+</div>

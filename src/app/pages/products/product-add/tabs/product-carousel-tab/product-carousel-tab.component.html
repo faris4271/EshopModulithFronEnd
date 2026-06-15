@@ -1,0 +1,127 @@
+<div [formGroup]="formService.getSubGroup('carousel')" class="space-y-6">
+  <h2 class="text-lg font-semibold text-gray-900 mb-2">Carousel & Related Products</h2>
+
+  <div class="border border-gray-200 rounded-xl p-5 bg-white space-y-6">
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <label class="block text-sm font-semibold text-gray-900">Related Products</label>
+        <button
+          type="button"
+          (click)="openProductSelector('related')"
+          class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+        >
+          + Add Related
+        </button>
+      </div>
+      <div class="space-y-3">
+        @for (rp of formService.relatedProducts.controls; track $index; let ri = $index) {
+          <div [formGroup]="toFormGroup(rp)" class="grid grid-cols-12 gap-4 items-center mb-3 last:mb-0">
+            <input
+              type="text"
+              formControlName="id"
+              readonly
+              class="col-span-3 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none"
+              placeholder="Product ID"
+            />
+            <input
+              type="text"
+              formControlName="name"
+              readonly
+              class="col-span-6 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none"
+              placeholder="Product name"
+            />
+            <div class="col-span-2 flex justify-center items-center">
+              <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="isPublished"
+                  class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+                />
+                <span>Published</span>
+              </label>
+            </div>
+            <div class="col-span-1 flex justify-center">
+              <button
+                type="button"
+                (click)="removeRelatedRow(ri)"
+                class="p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
+                title="Remove Product"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <p class="text-sm text-gray-400 text-center py-3">No related products available</p>
+        }
+      </div>
+    </div>
+
+    <div>
+      <div class="flex items-center justify-between mb-4">
+        <label class="block text-sm font-semibold text-gray-900">Cross-Sell Products</label>
+        <button
+          type="button"
+          (click)="openProductSelector('cross-sell')"
+          class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
+        >
+          + Add Cross-Sell
+        </button>
+      </div>
+      <div class="space-y-3">
+        @for (cs of formService.crossSellProducts.controls; track $index; let ci = $index) {
+          <div [formGroup]="toFormGroup(cs)" class="grid grid-cols-12 gap-4 items-center mb-3 last:mb-0">
+            <input
+              type="text"
+              formControlName="id"
+              readonly
+              class="col-span-3 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none"
+              placeholder="Product ID"
+            />
+            <input
+              type="text"
+              formControlName="name"
+              readonly
+              class="col-span-6 w-full px-3 py-2 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-500 cursor-not-allowed focus:outline-none"
+              placeholder="Product name"
+            />
+            <div class="col-span-2 flex justify-center items-center">
+              <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                <input
+                  type="checkbox"
+                  formControlName="isPublished"
+                  class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+                />
+                <span>Published</span>
+              </label>
+            </div>
+            <div class="col-span-1 flex justify-center">
+              <button
+                type="button"
+                (click)="removeCrossSellRow(ci)"
+                class="p-1 text-red-500 hover:bg-red-50 rounded transition-colors"
+                title="Remove Product"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        } @empty {
+          <p class="text-sm text-gray-400 text-center py-3">No cross-sell products available</p>
+        }
+      </div>
+    </div>
+  </div>
+
+  <app-product-selector
+    [isOpen]="isModalOpen()"
+    [excludedIds]="allExcludedIds()"
+    [type]="modalType() || 'related'"
+    (closeModal)="closeModal()"
+  ></app-product-selector>
+</div>
+

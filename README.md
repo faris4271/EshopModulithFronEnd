@@ -1,59 +1,67 @@
-# EsopAdmin
+# Esop Admin Dashboard
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.6.
+A modern administrative dashboard for managing an E-shop, built with Angular 21 and TailwindCSS.
 
-## Development server
+## 🚀 Tech Stack
 
-To start a local development server, run:
+- **Framework:** [Angular 21](https://angular.dev/) (Standalone Architecture)
+- **Styling:** [TailwindCSS](https://tailwindcss.com/) (via `@tailwindcss/postcss`)
+- **Notifications:** [ngx-toastr](https://www.npmjs.com/package/ngx-toastr)
+- **Package Manager:** npm
 
+## 🛠️ Getting Started
+
+### Prerequisites
+- Node.js (Latest LTS recommended)
+- npm
+
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd Esop_Admin
+   ```
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Development
+Run the development server:
 ```bash
-ng serve
+npm start
+```
+The application will be available at `http://localhost:4200/`.
+
+### Building for Production
+```bash
+npm run build
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🏗️ Architecture & Key Features
 
-## Code scaffolding
+### Standalone Components
+The project utilizes Angular's standalone architecture, removing the need for `NgModule` and simplifying the component dependency graph.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Global Error Handling
+Implemented a centralized error handling system using a custom `HttpInterceptor` and `ToastService`:
+- **`ToastService`**: A wrapper around `ngx-toastr` for consistent notification calls throughout the app.
+- **`errorInterceptor`**: Automatically catches all HTTP errors and displays a user-friendly toast notification, reducing redundant error handling in individual components.
 
-```bash
-ng generate component component-name
-```
+### Styling
+Integrated TailwindCSS for rapid UI development with a utility-first approach. Global styles are managed in `src/styles.css`.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 📁 Project Structure
+- `src/app/pages`: Feature-based page components.
+- `src/app/services`: Business logic and API integration services.
+- `src/app/interceptors`: HTTP interceptors for global request/response handling.
+- `src/app/models`: TypeScript interfaces and DTOs.
+- `public/`: Static assets.
 
-```bash
-ng generate --help
-```
+## 📜 Available Scripts
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+| Command | Description |
+|---------|-------------|
+| `npm start` | Starts the development server |
+| `npm run build` | Builds the project for production |
+| `npm test` | Runs unit tests |

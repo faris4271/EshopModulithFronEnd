@@ -1,0 +1,98 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12 sm:px-6 lg:px-8">
+  <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+    <div>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+        Sign in to your account
+      </h2>
+      <p class="mt-2 text-center text-sm text-gray-600">
+        Or
+        <a routerLink="/register" class="font-medium text-indigo-600 hover:text-indigo-500">
+          create a new account
+        </a>
+      </p>
+    </div>
+    <form class="mt-8 space-y-6" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="rounded-md shadow-sm space-y-4">
+        <div>
+          <label for="email-address" class="block text-sm font-medium text-gray-700">
+            Email address
+          </label>
+          <div class="mt-1">
+            <input 
+              id="email-address" 
+              name="email" 
+              type="email" 
+              formControlName="email" 
+              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+              placeholder="you@example.com"
+              [ngClass]="{'border-red-500': loginForm.get('email')?.invalid && loginForm.get('email')?.touched}"
+            >
+            <p *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="mt-1 text-xs text-red-600">
+              <span *ngIf="loginForm.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="loginForm.get('email')?.errors?.['email']">Please enter a valid email address</span>
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700">
+            Password
+          </label>
+          <div class="mt-1 relative">
+            <input 
+              id="password" 
+              name="password" 
+              [type]="showPassword() ? 'text' : 'password'" 
+              formControlName="password" 
+              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+              placeholder="••••••••"
+              [ngClass]="{'border-red-500': loginForm.get('password')?.invalid && loginForm.get('password')?.touched}"
+            >
+            <button 
+              type="button" 
+              (click)="togglePasswordVisibility()" 
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5 text-gray-500 hover:text-gray-400"
+            >
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+            <p *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="mt-1 text-xs text-red-600">
+              <span *ngIf="loginForm.get('password')?.errors?.['required']">Password is required</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <input 
+            id="remember-me" 
+            name="remember-me" 
+            type="checkbox" 
+            formControlName="rememberMe" 
+            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+          >
+          <label for="remember-me" class="ml-2 block text-sm text-gray-900">
+            Remember me
+          </label>
+        </div>
+
+        <div class="text-sm">
+          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
+            Forgot your password?
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <button 
+          type="submit" 
+          class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200"
+          [disabled]="loginForm.invalid"
+          [ngClass]="{'opacity-50 cursor-not-allowed': loginForm.invalid}"
+        >
+          Sign in
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
