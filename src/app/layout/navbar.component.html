@@ -1,5 +1,5 @@
 <header
-  class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-30"
+  class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-30 transition-colors"
 >
   <div class="flex items-center gap-4">
     <nav class="flex items-center text-sm text-gray-500">
@@ -16,7 +16,7 @@
       <input
         type="text"
         placeholder="Search..."
-        class="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+        class="w-full sm:w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-300 bg-white text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-colors"
         (input)="onSearch($event)"
       />
       <svg
@@ -34,7 +34,7 @@
       </svg>
     </div>
 
-    <button class="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500">
+    <button class="relative p-2 rounded-lg hover:bg-gray-100 text-gray-500 transition-colors">
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path
           stroke-linecap="round"
@@ -51,7 +51,7 @@
           <a routerLink="/profile" class="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <div class="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center overflow-hidden">
             @if (currentUser()?.imageUrl) {
-              <img [src]="currentUser()?.imageUrl" alt="Avatar" class="w-full h-full object-cover">
+              <img [src]="currentUser()?.imageUrl | fullImageUrl" alt="Avatar" class="w-full h-full object-cover">
             } @else {
               <span class="text-sm font-medium text-indigo-700">
                 {{ currentUser()?.firstName?.charAt(0) }}{{ currentUser()?.lastName?.charAt(0) }}

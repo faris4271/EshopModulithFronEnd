@@ -1,24 +1,37 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { AttributeGroupService } from '../../../services/attribute-group.service';
-import { AttributeGroup, AttributeGroupStatus } from '../../../models/attribute-group.model';
+import { AttributeGroup } from '../../../models/attribute-group.model';
+import { CommonModule } from '@angular/common';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-attribute-group-list',
   standalone: true,
-  imports: [],
+  imports: [RouterLink, CommonModule, ConfirmationDialogComponent],
   templateUrl: './attribute-group-list.component.html',
   styleUrl: './attribute-group-list.component.css',
 })
-export class AttributeGroupListComponent {
+export class AttributeGroupListComponent implements OnInit {
   private groupService = inject(AttributeGroupService);
 
-  AttributeGroupStatus = AttributeGroupStatus;
   Math = Math;
 
-  allGroups = signal(this.groupService.getGroups());
+  allGroups = signal<AttributeGroup[]>([]);
   searchTerm = signal('');
   currentPage = signal(1);
   pageSize = signal(10);
+  groupToDelete = signal<AttributeGroup | null>(null);
+
+  ngOnInit(): void {
+    this.loadGroups();
+  }
+
+  loadGroups(): void {
+    this.groupService.getGroups().subscribe((groups) => {
+      this.allGroups.set(groups);
+    });
+  }
 
   filteredGroups = computed(() => {
     let result = this.allGroups();
@@ -26,7 +39,7 @@ export class AttributeGroupListComponent {
     if (search) {
       result = result.filter(
         (g) =>
-          g.name.toLowerCase().includes(search) || g.description.toLowerCase().includes(search),
+          g.name.toLowerCase().includes(search) ,
       );
     }
     return result;
@@ -38,18 +51,21 @@ export class AttributeGroupListComponent {
     return this.filteredGroups().slice(start, start + this.pageSize());
   });
 
-  deleteGroup(id: number): void {
-    if (confirm('Are you sure you want to delete this attribute group?')) {
-      this.groupService.deleteGroup(id);
-      this.allGroups.set(this.groupService.getGroups());
+  deleteGroup(group: AttributeGroup): void {
+    this.groupToDelete.set(group);
+  }
+
+  cancelDelete(): void {
+    this.groupToDelete.set(null);
+  }
+
+  confirmDelete(): void {
+    const group = this.groupToDelete();
+    if (group) {
+      this.groupService.deleteGroup(group.id).subscribe(() => {
+        this.loadGroups();
+        this.cancelDelete();
+      });
     }
-  }
-
-  getStatusBadgeClass(status: AttributeGroupStatus): string {
-    return this.groupService.getStatusColor(status);
-  }
-
-  getStatusName(status: AttributeGroupStatus): string {
-    return this.groupService.getStatusName(status);
   }
 }

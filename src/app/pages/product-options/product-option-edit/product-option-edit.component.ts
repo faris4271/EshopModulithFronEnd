@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute, RouterLink, isActive } from '@angular/router';
 import { ProductOptionService } from '../../../services/product-option.service';
-import { ProductOption, OptionStatus, UpdateProductOptionDto } from '../../../models/product-option.model';
+import { ProductOption, UpdateProductOptionDto } from '../../../models/product-option.model';
 
 @Component({
   selector: 'app-product-option-edit',
@@ -30,7 +30,7 @@ export class ProductOptionEditComponent implements OnInit {
 
   form: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    status: [OptionStatus.Active],
+   
   });
 
   ngOnInit(): void {

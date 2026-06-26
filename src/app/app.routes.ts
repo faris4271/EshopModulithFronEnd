@@ -125,6 +125,30 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'attributes/templates',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/attributes/product-attribute-template-list/product-attribute-template-list.component').then(
+            (m) => m.ProductAttributeTemplateListComponent,
+          ),
+      },
+      {
+        path: 'attributes/templates/add',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/attributes/product-attribute-template-add/product-attribute-template-add.component').then(
+            (m) => m.ProductAttributeTemplateAddComponent,
+          ),
+      },
+      {
+        path: 'attributes/templates/edit/:id',
+        canActivate: [authGuard],
+        loadComponent: () =>
+          import('./pages/attributes/product-attribute-template-edit/product-attribute-template-edit.component').then(
+            (m) => m.ProductAttributeTemplateEditComponent,
+          ),
+      },
+      {
         path: 'attributes/add',
         canActivate: [authGuard],
         loadComponent: () =>
@@ -132,13 +156,30 @@ export const routes: Routes = [
             (m) => m.ProductAttributeAddComponent,
           ),
       },
-      {
-        path: 'attribute-groups',
-        loadComponent: () =>
-          import('./pages/attributes/attribute-group-list/attribute-group-list.component').then(
-            (m) => m.AttributeGroupListComponent,
-          ),
-      },
+        {
+          path: 'attribute-groups',
+          loadComponent: () =>
+            import('./pages/attributes/attribute-group-list/attribute-group-list.component').then(
+              (m) => m.AttributeGroupListComponent,
+            ),
+        },
+        {
+          path: 'attribute-groups/add',
+          canActivate: [authGuard],
+          loadComponent: () =>
+            import('./pages/attributes/attribute-group-add/attribute-group-add.component').then(
+              (m) => m.AttributeGroupAddComponent,
+            ),
+        },
+        {
+          path: 'attribute-groups/edit/:id',
+          canActivate: [authGuard],
+          loadComponent: () =>
+            import('./pages/attributes/attribute-group-edit/attribute-group-edit.component').then(
+              (m) => m.AttributeGroupEditComponent,
+            ),
+        },
+
       {
         path: 'orders',
         loadComponent: () =>
@@ -184,77 +225,77 @@ export const routes: Routes = [
        {
          path: 'site/settings',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'site/store-info',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'inventory/stock',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'inventory/warehouses',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'promotions/coupons',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'promotions/discounts',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'content/pages',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'content/banners',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'system/users',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'system/settings',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },
       {
         path: 'system/logs',
         loadComponent: () =>
-          import('./pages/shared/placeholder/placeholder.component').then(
+          import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
       },

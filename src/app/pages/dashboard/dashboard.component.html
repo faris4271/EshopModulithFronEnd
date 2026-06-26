@@ -188,7 +188,7 @@
               class="w-10 h-10 rounded-lg bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center shrink-0"
             >
               <span class="text-xs font-bold text-indigo-700">{{
-                product.product_name.charAt(0)
+                product.product_name?.charAt(0) ?? ''
               }}</span>
             </div>
             <div class="flex-1 min-w-0">

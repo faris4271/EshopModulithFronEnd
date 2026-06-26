@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ProductOptionService } from '../../../services/product-option.service';
-import { OptionStatus, CreateProductOptionDto } from '../../../models/product-option.model';
+import {  CreateProductOptionDto } from '../../../models/product-option.model';
 
 @Component({
   selector: 'app-product-option-add',
@@ -26,7 +26,7 @@ export class ProductOptionAddComponent {
 
   form: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(2)]],
-    status: [OptionStatus.Active],
+    
   });
 
   isFieldInvalid(fieldName: string): boolean {

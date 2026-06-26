@@ -43,7 +43,9 @@ export class SidebarComponent {
         { label: 'Brands', route: '/brands' },
         { label: 'Product Options', route: '/product-options' },
         { label: 'Attributes', route: '/attributes' },
+        { label: 'Attribute Templates', route: '/attributes/templates' },
         { label: 'Attribute Groups', route: '/attribute-groups' },
+       
       ],
     },
     {

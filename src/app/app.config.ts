@@ -7,6 +7,7 @@ import { provideToastr } from 'ngx-toastr';
 import { routes } from './app.routes';
 import { errorInterceptor } from './interceptors/error.interceptor';
 import { refreshTokenInterceptor } from './interceptors/refresh-token-interceptor';
+import { spinnerInterceptor } from './interceptors/spinner.interceptor';
 import { AuthService } from './services/auth-service';
 export function initializeAuth(authService: AuthService) {
   return () => authService.checkAuthStatus();
@@ -14,7 +15,7 @@ export function initializeAuth(authService: AuthService) {
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    provideHttpClient(withInterceptors([errorInterceptor, refreshTokenInterceptor])),
+    provideHttpClient(withInterceptors([errorInterceptor, refreshTokenInterceptor, spinnerInterceptor])),
     provideAnimationsAsync(),
     provideToastr({
       timeOut: 3000,
@@ -22,7 +23,8 @@ export const appConfig: ApplicationConfig = {
       preventDuplicates: true,
       progressBar: true,
       closeButton: true,
-      newestOnTop: true
+      newestOnTop: true,
+      toastClass: 'ngx-toastr toast'
     }),
 
     {

@@ -1,0 +1,85 @@
+<div class="space-y-6" [formGroup]="form">
+  <div class="flex items-center justify-between">
+    <h1 class="text-2xl font-bold text-gray-900">Create Product Template</h1>
+  </div>
+
+  @if (form.invalid && form.touched) {
+    <div class="p-4 text-sm text-red-700 bg-red-100 rounded-lg border border-red-200" role="alert">
+      Please provide a template name and add at least one attribute.
+    </div>
+  }
+
+  <div class="bg-white rounded-xl border border-gray-200 p-6 space-y-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+      <label class="block text-sm font-medium text-gray-700">Template Name</label>
+      <input
+        type="text"
+        formControlName="name"
+        class="md:col-span-2 block w-full rounded-lg border border-gray-300 p-2.5 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+        placeholder="Enter template name"
+      />
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+      <label class="block text-sm font-medium text-gray-700">Available Attributes</label>
+      <div class="md:col-span-2 flex gap-2">
+        <select
+          #attributeSelect
+          class="flex-1 rounded-lg border border-gray-300 p-2.5 text-sm focus:border-indigo-500 focus:ring-indigo-500"
+        >
+          <option value="">Select an attribute</option>
+          @for (groupName of groupedAttributes() | keyvalue; track groupName.key) {
+            <optgroup [label]="groupName.key">
+              @for (attr of groupName.value; track attr.id) {
+                <option [value]="attr.id">{{ attr.name }}</option>
+              }
+            </optgroup>
+          }
+        </select>
+        <button
+          type="button"
+          (click)="addAttribute(attributeSelect.value); attributeSelect.value=''"
+          class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700"
+        >
+          Add
+        </button>
+      </div>
+    </div>
+
+    @if (addedAttributes().length > 0) {
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <label class="block text-sm font-medium text-gray-700">Added Attributes</label>
+        <div class="md:col-span-2 flex flex-wrap gap-2">
+          @for (attr of addedAttributes(); track attr.id) {
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 border border-indigo-200">
+              {{ attr.name }}
+              <button type="button" (click)="removeAttribute(attr.id)" class="text-indigo-600 hover:text-indigo-900">
+                &times;
+              </button>
+            </span>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="flex justify-end gap-3">
+    <button
+      type="button"
+      routerLink="/attributes/templates"
+      class="px-4 py-2 rounded-lg border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+    >
+      Cancel
+    </button>
+    <button
+      type="button"
+      (click)="onSave()"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
+      Save
+    </button>
+  </div>
+</div>

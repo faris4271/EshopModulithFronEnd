@@ -1,14 +1,13 @@
 export interface AttributeGroup {
-  id: number;
+  id: string | number;
   name: string;
-  description: string;
-  sort_order: number;
-  status: AttributeGroupStatus;
-  total_attributes: number;
-  created_at: string;
 }
 
-export enum AttributeGroupStatus {
-  Active = 1,
-  Inactive = 0,
+export interface AttributeGroupCreatePayload {
+  name: string;
+}
+
+export interface AttributeGroupUpdatePayload {
+  id: string | number;
+  name: string;
 }

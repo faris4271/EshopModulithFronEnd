@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ProductOption, OptionStatus, CreateProductOptionDto, UpdateProductOptionDto } from '../models/product-option.model';
+import { ProductOption,  CreateProductOptionDto, UpdateProductOptionDto } from '../models/product-option.model';
 import { OPTION_STATUS_CONFIG } from '../models/product-option.constants';
 import { environment } from '../../environments/environment.development';
 
@@ -37,11 +37,6 @@ export class ProductOptionService {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
-  getStatusName(status: OptionStatus): string {
-    return OPTION_STATUS_CONFIG[status]?.label || 'Unknown';
-  }
 
-  getStatusColor(status: OptionStatus): string {
-    return OPTION_STATUS_CONFIG[status]?.colorClass || '';
-  }
+  
 }

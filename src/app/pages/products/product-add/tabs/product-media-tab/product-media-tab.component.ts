@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { FullImageUrlPipe } from '../../../../../pipes/full-image-url.pipe';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProductFormService } from '../../services/product-form.service';
@@ -6,7 +7,7 @@ import { ProductFormService } from '../../services/product-form.service';
 @Component({
   selector: 'app-product-media-tab',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FullImageUrlPipe],
   templateUrl: './product-media-tab.component.html',
 })
 export class ProductMediaTabComponent {

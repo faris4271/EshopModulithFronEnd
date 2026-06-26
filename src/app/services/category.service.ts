@@ -66,7 +66,7 @@ export class CategoryService {
     return this.http.put(`${this.apiUrl}/${dto.id}`, formData);
   }
 
-  deleteCategory(id: number): Observable<any> {
+  deleteCategory(id: string): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
 }

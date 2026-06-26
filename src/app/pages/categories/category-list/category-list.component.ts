@@ -44,4 +44,19 @@ export class CategoryListComponent implements OnInit {
     };
     return map[color] || 'text-gray-600';
   }
+
+  deleteCategory(id: string): void {
+    if (!window.confirm('Are you sure you want to delete this category?')) {
+      return;
+    }
+
+    this.categoryService.deleteCategory(id).subscribe({
+      next: () => {
+        this.categories.update((prev) => prev.filter((c) => c.id !== id));
+      },
+      error: (err) => {
+        alert('Failed to delete category: ' + err.message);
+      },
+    });
+  }
 }

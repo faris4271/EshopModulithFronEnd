@@ -15,7 +15,7 @@ export interface ProductVariationDto {
   gtin: string;
   newImages?: File[];
   optionCombinations: ProductOptionCombinationDto[];
-  id: number;
+  id: string;
   sku: string;
   imageUrls: string[];
 }
@@ -34,7 +34,6 @@ export interface ProductRelatedDto {
 
 export interface ProductAttributeDto {
   id: string;
-  attributeValueId: number;
   name: string;
   value: string;
   groupId: string;
@@ -42,7 +41,10 @@ export interface ProductAttributeDto {
 }
 
 export interface ProductOptionValueDto {
-  [key: string]: any;
+  id?: string;
+  name: string;
+  /** Determines UI rendering: 'text' or 'color' */
+  displayType: string;
 }
 
 export interface ProductOptionDto {

@@ -1,126 +1,31 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { ProductAttribute } from '../models/product-attribute.model';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class ProductAttributeService {
-  private attributes: ProductAttribute[] = [
-    {
-      id: '1',
-      name: 'Color',
-      groupId: '1',
-      groupName: 'General',
-    },
-    {
-      id: '2',
-      name: 'Material',
-      groupId: '1',
-      groupName: 'General',
-    },
-    {
-      id: '3',
-      name: 'Weight',
-      groupId: '1',
-      groupName: 'General',
-    },
-    {
-      id: '4',
-      name: 'Screen Size',
-      groupId: '2',
-      groupName: 'Electronics',
-    },
-    {
-      id: '5',
-      name: 'RAM',
-      groupId: '2',
-      groupName: 'Electronics',
-    },
-    {
-      id: '6',
-      name: 'Storage',
-      groupId: '2',
-      groupName: 'Electronics',
-    },
-    {
-      id: '7',
-      name: 'Battery Life',
-      groupId: '2',
-      groupName: 'Electronics',
-    },
-    {
-      id: '8',
-      name: 'Wireless',
-      groupId: '2',
-      groupName: 'Electronics',
-    },
-    {
-      id: '9',
-      name: 'Size',
-      groupId: '3',
-      groupName: 'Clothing',
-    },
-    {
-      id: '10',
-      name: 'Fabric',
-      groupId: '3',
-      groupName: 'Clothing',
-    },
-    {
-      id: '11',
-      name: 'Dimensions',
-      groupId: '4',
-      groupName: 'Home & Furniture',
-    },
-    {
-      id: '12',
-      name: 'Assembly Required',
-      groupId: '4',
-      groupName: 'Home & Furniture',
-    },
-    {
-      id: '13',
-      name: 'Finish',
-      groupId: '4',
-      groupName: 'Home & Furniture',
-    },
-    {
-      id: '14',
-      name: 'Skill Level',
-      groupId: '5',
-      groupName: 'Hobby',
-    },
-    {
-      id: '15',
-      name: 'Skin Type',
-      groupId: '6',
-      groupName: 'Beauty',
-    },
-  ];
+  private http = inject(HttpClient);
+  private apiUrl = environment.ApiUrl + '/product-attributes';
 
-  getAttributes(): ProductAttribute[] {
-    return [...this.attributes];
+  getAttributes(): Observable<ProductAttribute[]> {
+    return this.http.get<ProductAttribute[]>(this.apiUrl);
   }
 
-  getAttributeById(id: string): ProductAttribute | undefined {
-    return this.attributes.find((a) => a.id === id);
+  getAttributeById(id: string): Observable<ProductAttribute> {
+    return this.http.get<ProductAttribute>(`${this.apiUrl}/${id}`);
   }
 
-  addAttribute(attribute: Omit<ProductAttribute, 'id'>): ProductAttribute {
-    const newAttribute: ProductAttribute = {
-      ...attribute,
-      id: (this.attributes.length + 1).toString(),
-    };
-    this.attributes.push(newAttribute);
-    return newAttribute;
+  addAttribute(attribute: Omit<ProductAttribute, 'id'>): Observable<ProductAttribute> {
+    return this.http.post<ProductAttribute>(this.apiUrl, attribute);
   }
 
-  updateAttribute(attribute: ProductAttribute): void {
-    const index = this.attributes.findIndex((a) => a.id === attribute.id);
-    if (index !== -1) {
-      this.attributes[index] = attribute;
-    }
+  updateAttribute(attribute: ProductAttribute): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/${attribute.id}`, attribute);
   }
 
-  deleteAttribute(id: string): void {
-    this.attributes = this.attributes.filter((a) => a.id !== id);
+  deleteAttribute(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }

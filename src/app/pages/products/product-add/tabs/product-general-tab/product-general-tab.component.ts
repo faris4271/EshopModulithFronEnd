@@ -5,7 +5,6 @@ import { ProductFormService } from '../../services/product-form.service';
 import { Brand } from '../../../../../models/brand.model';
 import { Category } from '../../../../../models/category.model';
 import { TaxClass } from '../../../../../models/tax-class.model';
-import { ProductAttribute } from '../../../../../models/product-attribute.model';
 
 @Component({
   selector: 'app-product-general-tab',
@@ -19,7 +18,6 @@ export class ProductGeneralTabComponent {
   brands = input<Brand[]>([]);
   categories = input<Category[]>([]);
   taxClasses = input<TaxClass[]>([]);
-  availableAttributes = input<ProductAttribute[]>([]);
 
   isCategoryDropdownOpen = signal(false);
 
@@ -27,19 +25,14 @@ export class ProductGeneralTabComponent {
     this.isCategoryDropdownOpen.update(v => !v);
   }
 
-  isCategorySelected(id: number): boolean {
+  isCategorySelected(id: string): boolean 
+  {
+    
     return this.formService.isCategorySelected(id);
   }
 
-  toggleCategory(id: number): void {
+  toggleCategory(id: string): void {
     this.formService.toggleCategory(id);
-  }
-
-  onAttributeSelect(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const id = String(select.value);
-    this.formService.onAttributeSelect(id);
-    select.value = '';
   }
 }
 

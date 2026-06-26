@@ -54,6 +54,10 @@
         [brands]="brands()" 
         [categories]="categories()" 
         [taxClasses]="taxClasses()" 
+      />
+    }
+    @if (activeTab() === 'attributes') {
+      <app-product-attributes-tab 
         [availableAttributes]="availableAttributes()" 
       />
     }

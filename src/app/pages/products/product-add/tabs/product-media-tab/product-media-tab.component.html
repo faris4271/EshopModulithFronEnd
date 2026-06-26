@@ -7,7 +7,7 @@
       @if (formService.thumbnailPreview()) {
         <div class="relative w-32 h-32 rounded-lg overflow-hidden border border-gray-200">
           <img
-            [src]="formService.thumbnailPreview()"
+            [src]="formService.thumbnailPreview() | fullImageUrl"
             class="w-full h-full object-cover"
             alt="Thumbnail"
           />
@@ -50,12 +50,32 @@
 
   <div>
     <label class="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+    @if (formService.existingProductImages().length > 0) {
+      <div class="grid grid-cols-4 gap-3 mb-3">
+        @for (media of formService.existingProductImages(); track media.id) {
+          <div class="relative group">
+            <img
+              [src]="media.mediaUrl | fullImageUrl"
+              class="w-full h-24 object-cover rounded-lg border border-gray-200"
+              alt="Existing product image"
+            />
+            <button
+              type="button"
+              (click)="formService.removeExistingProductImage($index)"
+              class="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              &times;
+            </button>
+          </div>
+        }
+      </div>
+    }
     @if (formService.productImagePreviews().length > 0) {
       <div class="grid grid-cols-4 gap-3 mb-3">
         @for (preview of formService.productImagePreviews(); track $index) {
           <div class="relative group">
             <img
-              [src]="preview"
+              [src]="preview | fullImageUrl"
               class="w-full h-24 object-cover rounded-lg border border-gray-200"
               alt="Product image"
             />
@@ -87,6 +107,38 @@
 
   <div>
     <label class="block text-sm font-medium text-gray-700 mb-2">Product Documents</label>
+    @if (formService.existingProductDocuments().length > 0) {
+      <div class="space-y-2 mb-3">
+        @for (doc of formService.existingProductDocuments(); track doc.id) {
+          <div class="flex items-center justify-between p-2 bg-gray-50 rounded-lg border border-gray-100">
+            <div class="flex items-center gap-2">
+              <svg
+                class="w-4 h-4 text-gray-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+              <span class="text-sm text-gray-700">{{ doc.caption || 'Document' }}</span>
+              <span class="text-xs text-gray-400 truncate max-w-xs">{{ doc.mediaUrl }}</span>
+            </div>
+            <button
+              type="button"
+              (click)="formService.removeExistingProductDocument($index)"
+              class="text-red-500 hover:text-red-700 text-sm"
+            >
+              Remove
+            </button>
+          </div>
+        }
+      </div>
+    }
     @if (formService.productDocumentFiles.length > 0) {
       <div class="space-y-2 mb-3">
         @for (doc of formService.productDocumentFiles; track $index) {

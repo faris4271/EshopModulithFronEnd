@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductOptionService } from '../../../services/product-option.service';
-import { ProductOption, OptionStatus } from '../../../models/product-option.model';
+import { ProductOption} from '../../../models/product-option.model';
 
 @Component({
   selector: 'app-product-option-list',
@@ -37,11 +37,5 @@ export class ProductOptionListComponent implements OnInit {
     });
   }
 
-  getStatusName(status: OptionStatus): string {
-    return this.optionService.getStatusName(status);
-  }
 
-  getStatusColor(status: OptionStatus): string {
-    return this.optionService.getStatusColor(status);
-  }
 }

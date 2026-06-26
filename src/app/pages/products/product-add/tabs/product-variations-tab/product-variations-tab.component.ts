@@ -1,4 +1,5 @@
 import { Component, inject, input, computed } from '@angular/core';
+import { FullImageUrlPipe } from '../../../../../pipes/full-image-url.pipe';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { ProductFormService } from '../../services/product-form.service';
@@ -8,7 +9,7 @@ import { ProductOption } from '../../../../../models/product-option.model';
 @Component({
   selector: 'app-product-variations-tab',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FullImageUrlPipe],
   templateUrl: './product-variations-tab.component.html',
 })
 export class ProductVariationsTabComponent {
@@ -63,4 +64,3 @@ export class ProductVariationsTabComponent {
     }
   }
 }
-

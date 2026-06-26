@@ -21,8 +21,7 @@
       'Segoe UI',
       Roboto,
       sans-serif;
-    background-color: #f9fafb;
-    color: #111827;
+    @apply bg-gray-50 text-gray-900;
   }
 
   ::-webkit-scrollbar {
@@ -41,5 +40,65 @@
 
   ::-webkit-scrollbar-thumb:hover {
     background: #9ca3af;
+  }
+}
+
+@layer components {
+  .toast-container {
+    @apply !p-4;
+  }
+
+  .toast {
+    @apply !bg-white !text-gray-800 !rounded-xl !shadow-2xl !border !border-gray-100 !p-4;
+    opacity: 1 !important;
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  }
+
+  .toast-success {
+    @apply !border-l-4 !border-l-green-500;
+  }
+
+  .toast-error {
+    @apply !border-l-4 !border-l-red-500;
+  }
+
+  .toast-info {
+    @apply !border-l-4 !border-l-blue-500;
+  }
+
+  .toast-warning {
+    @apply !border-l-4 !border-l-yellow-500;
+  }
+
+  .toast-title {
+    @apply !font-bold !text-gray-900 !mb-1;
+  }
+
+  .toast-message {
+    @apply !text-gray-600;
+  }
+
+  .toast-close-button {
+    @apply !text-gray-400 hover:!text-gray-600 !transition-colors;
+  }
+
+  .toast-progress-bar {
+    @apply !h-1 !bottom-0 !left-0;
+  }
+
+  .toast-success .toast-progress-bar {
+    @apply !bg-green-500;
+  }
+
+  .toast-error .toast-progress-bar {
+    @apply !bg-red-500;
+  }
+
+  .toast-info .toast-progress-bar {
+    @apply !bg-blue-500;
+  }
+
+  .toast-warning .toast-progress-bar {
+    @apply !bg-yellow-500;
   }
 }
