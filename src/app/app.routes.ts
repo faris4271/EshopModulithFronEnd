@@ -40,16 +40,41 @@ export const routes: Routes = [
             (m) => m.ProductAddComponent,
           ),
       },
-      {
-        path: 'products/edit/:id',
+       {
+         path: 'products/edit/:id',
+          canActivate:[authGuard],
+         loadComponent: () =>
+           import('./pages/products/product-add/product-add.component').then(
+             (m) => m.ProductAddComponent,
+           ),
+       },
+       {
+         path: 'vendors',
+          canActivate:[authGuard],
+         loadComponent: () =>
+           import('./pages/vendors/vendor-list/vendor-list.component').then(
+             (m) => m.VendorListComponent,
+           ),
+       },
+       {
+         path: 'vendors/add',
          canActivate:[authGuard],
-        loadComponent: () =>
-          import('./pages/products/product-add/product-add.component').then(
-            (m) => m.ProductAddComponent,
-          ),
-      },
-      {
-        path: 'categories',
+         loadComponent: () =>
+           import('./pages/vendors/vendor-add/vendor-add.component').then(
+             (m) => m.VendorAddComponent,
+           ),
+       },
+       {
+         path: 'vendors/edit/:id',
+         canActivate:[authGuard],
+         loadComponent: () =>
+           import('./pages/vendors/vendor-add/vendor-add.component').then(
+             (m) => m.VendorAddComponent,
+           ),
+       },
+       {
+         path: 'categories',
+
         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/categories/category-list/category-list.component').then(
@@ -238,9 +263,10 @@ export const routes: Routes = [
       },
       {
         path: 'inventory/stock',
+        canActivate:[authGuard],
         loadComponent: () =>
-          import('./shared/placeholder/placeholder.component').then(
-            (m) => m.PlaceholderComponent,
+          import('./pages/inventory/stock-list/stock-list.component').then(
+            (m) => m.StockListComponent,
           ),
       },
       {

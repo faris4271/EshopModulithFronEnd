@@ -1,0 +1,190 @@
+<div class="p-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800">Stock Management for Warehouse</h1>
+      <p class="text-sm text-gray-500">
+        Managing stocks for <span class="font-semibold text-gray-700">
+          {{ selectedWarehouse().name }}
+        </span>
+      </p>
+    </div>
+    <div class="flex items-center gap-4">
+      <div class="flex flex-col items-end">
+        <select 
+          [ngModel]="selectedWarehouseId()" 
+          (ngModelChange)="onWarehouseChange($event)"
+          class="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white min-w-[200px]"
+        >
+          @for (w of warehouses(); track w.id) {
+            <option [value]="w.id">{{ w.name }}</option>
+          }
+        </select>
+        <a routerLink="/inventory/warehouses" class="text-xs text-indigo-600 hover:text-indigo-800 mt-1 font-medium">
+          Manage warehouses
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Card -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm">
+    <!-- Filter Row -->
+    <div class="p-4 border-b border-gray-200 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input 
+        type="text" 
+        placeholder="Search by product name..." 
+        [value]="filterProductName()"
+        (input)="updateFilterProductName($any($event.target).value)"
+        class="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+      <input 
+        type="text" 
+        placeholder="Search by SKU..." 
+        [value]="filterSku()"
+        (input)="updateFilterSku($any($event.target).value)"
+        class="px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+      />
+    </div>
+
+    <!-- Records Count -->
+    <div class="px-6 py-3 bg-gray-50 border-b border-gray-200">
+      <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">
+        {{ totalRecords() }} records found
+      </span>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto relative">
+      @if (isLoadingStocks()) {
+        <div class="absolute inset-0 bg-white/50 flex items-center justify-center z-10">
+          <div class="flex items-center gap-2 text-indigo-600 font-medium">
+            <svg class="animate-spin h-5 w-5 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
+            Loading stocks...
+          </div>
+        </div>
+      }
+      <table class="w-full text-sm text-left">
+        <thead class="bg-gray-50 border-b border-gray-200">
+          <tr>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Product Sku</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Current Qty</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-right">Adjusted Qty</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">Note</th>
+            <th class="px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider text-center">Stock History</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100" [formGroup]="stockForm">
+          @for (stock of allStocks(); track stock.id; let i = $index) {
+            <tr class="hover:bg-gray-50 transition-colors" [formGroup]="stockForm.controls.rows.controls[i]">
+              <td class="px-6 py-4 text-gray-800 font-medium">
+                <a [routerLink]="['/products/edit', stock.productId]" class="text-indigo-600 hover:text-indigo-800">
+                  {{ stock.productName }}
+                </a>
+              </td>
+              <td class="px-6 py-4 text-gray-500">
+                {{ stock.sku || '—' }}
+              </td>
+              <td class="px-6 py-4 text-right text-gray-600">
+                {{ stock.quantity }}
+              </td>
+              <td class="px-6 py-4 text-right">
+                <input 
+                  type="number" 
+                  formControlName="adjustedQuantity"
+                  class="w-24 text-right px-2 py-1 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </td>
+              <td class="px-6 py-4">
+                <input 
+                  type="text" 
+                  formControlName="note"
+                  placeholder="Add note..."
+                  class="w-full px-3 py-1 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </td>
+              <td class="px-6 py-4 text-center">
+                 <button 
+                   (click)="openHistory(stock.productId, stock.warehouseId, stock.productName)"
+                   class="text-indigo-600 hover:text-indigo-800 text-sm font-medium cursor-pointer"
+                 >
+                  View History
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="6" class="px-6 py-12 text-center">
+                <div class="flex flex-col items-center justify-center text-gray-400">
+                  <svg class="w-12 h-12 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                  <p>No stock records found for this warehouse.</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination Footer -->
+    <div class="px-6 py-4 border-t border-gray-200 flex items-center justify-between bg-gray-50">
+      <div class="text-sm text-gray-500">
+        Showing {{ (currentPage() - 1) * pageSize() + 1 }} to 
+        {{ Math.min(currentPage() * pageSize(), totalRecords()) }} of {{ totalRecords() }} entries
+      </div>
+      <div class="flex items-center gap-1">
+        <button 
+          (click)="currentPage.set(currentPage() - 1); loadStocks()" 
+          [disabled]="currentPage() === 1"
+          class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm disabled:opacity-50 hover:bg-gray-50"
+        >
+          Previous
+        </button>
+        @for (p of pageNumbers(); track p) {
+          <button 
+            (click)="currentPage.set(p); loadStocks()" 
+            [class.bg-indigo-600]="p === currentPage()" 
+            [class.text-white]="p === currentPage()"
+            [class.text-gray-600]="p !== currentPage()"
+            class="w-8 h-8 rounded-md border border-gray-300 text-sm transition-colors hover:bg-gray-100"
+          >
+            {{ p }}
+          </button>
+        }
+        <button 
+          (click)="currentPage.set(currentPage() + 1); loadStocks()" 
+          [disabled]="currentPage() >= totalPages()"
+          class="px-3 py-1 rounded-md border border-gray-300 bg-white text-sm disabled:opacity-50 hover:bg-gray-50"
+        >
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="mt-6 flex justify-end">
+    <button 
+      (click)="saveChanges()" 
+      [disabled]="!isFormDirty || isSaving()"
+      class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors font-medium shadow-sm"
+    >
+      {{ isSaving() ? 'Saving...' : 'Save Adjustments' }}
+    </button>
+  </div>
+
+  <!-- Stock History Modal -->
+   <app-stock-history-modal 
+     [productId]="historyProductId()" 
+     [warehouseId]="historyWarehouseId()" 
+     [productName]="historyProductName()" 
+     [(visible)]="showHistoryModal"
+     (visibleChange)="closeHistory()"
+   />
+</div>

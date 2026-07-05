@@ -29,10 +29,12 @@ export class SidebarComponent {
     {
       label: 'Site',
       icon: 'site',
-      children: [
-        { label: 'Settings', route: '/site/settings' },
-        { label: 'Store Info', route: '/site/store-info' },
-      ],
+       children: [
+         { label: 'Settings', route: '/site/settings' },
+         { label: 'Store Info', route: '/site/store-info' },
+         { label: 'Vendors', route: '/vendors' },
+       ],
+
     },
     {
       label: 'Catalog',

@@ -1,0 +1,73 @@
+@if (visible()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+    <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden">
+      <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-800">
+          Stock History — {{ productName() }}
+        </h3>
+        <button 
+          (click)="close()" 
+          class="p-2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <div class="p-6">
+        @if (isLoading()) {
+          <div class="flex justify-center py-8">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600"></div>
+          </div>
+        } @else if (error()) {
+          <div class="text-center py-8 text-red-500">
+            {{ error() }}
+          </div>
+        } @else if (history().length === 0) {
+          <div class="text-center py-8 text-gray-500">
+            No history available for this product.
+          </div>
+        } @else {
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+              <thead class="bg-gray-50 text-gray-500 uppercase text-xs font-medium">
+                <tr>
+                  <th class="px-4 py-3">Date</th>
+                  <th class="px-4 py-3 text-right">Adjustment</th>
+                  <th class="px-4 py-3">Note</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                @for (entry of history(); track entry.id) {
+                  <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3 text-gray-600">
+                      {{ entry.createdOn | date: 'medium' }}
+                    </td>
+                     <td class="px-4 py-3 text-right font-medium" 
+                         [class.text-green-600]="entry.adjustedQuantity > 0" 
+                         [class.text-red-600]="entry.adjustedQuantity < 0">
+                       {{ entry.adjustedQuantity > 0 ? '+' : '' }}{{ entry.adjustedQuantity }}
+                     </td>
+                    <td class="px-4 py-3 text-gray-500">
+                      {{ entry.note || '—' }}
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+
+      <div class="px-6 py-4 border-t border-gray-100 flex justify-end">
+        <button 
+          (click)="close()" 
+          class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+}

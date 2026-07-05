@@ -1,5 +1,5 @@
 export const environment = {
-  ApiUrl: "https://localhost:63239/api"
+  ApiUrl: "https://localhost:50235/api"
   ,
-  PhotoBaseUrl: "https://localhost:63239/",
-};
+  PhotoBaseUrl: "https://localhost:50235/",
+}

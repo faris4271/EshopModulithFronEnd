@@ -1,19 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { Login } from '../models/Login';
-import ht from '@angular/common/locales/ht';
 import { environment } from '../../environments/environment.development';
-import lo from '@angular/common/locales/lo';
 import { catchError, firstValueFrom, of, tap } from 'rxjs';
 import { LoginResponse } from '../models/LoginResponse';
-import th from '@angular/common/locales/th';
 import { profile } from '../models/profile';
+import { RegisterRequest } from '../models/RegisterRequest';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
- ApiUrl=environment.ApiUrl
+ ApiUrl=environment.ApiUrl+'/identity'
   constructor(private http:HttpClient){}
   
   AuthenticationSignal=signal<boolean|null>(null);
@@ -23,19 +21,32 @@ export class AuthService {
 
 
   login(form:any)
-  {
-    return this.http.post<LoginResponse>(this.ApiUrl+"/identity/token",form).pipe(
-      tap(response=>{
-     
-     this.AuthenticationSignal.set(true)
+   {
+     return this.http.post<LoginResponse>(this.ApiUrl+"/token",form).pipe(
+       tap(response=>{
+      
+      this.AuthenticationSignal.set(true)
+       })
+     )
+   }
+
+   register(form: RegisterRequest) {
+    return this.http.post<any>(this.ApiUrl + "/register", form).pipe(
+      tap(response => {
+        this.AuthenticationSignal.set(true);
+      }),
+      catchError(error => {
+        console.error('Registration error:', error);
+        throw error;
       })
-    )
+    );
   }
+
 
 
   refreshTheToken()
   {
-     return this.http.get<string>(this.ApiUrl+"/token/refresh")
+     return this.http.get<string>(this.ApiUrl+"/refresh-token")
   }
 
   logout()
