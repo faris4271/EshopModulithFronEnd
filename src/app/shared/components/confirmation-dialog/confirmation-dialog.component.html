@@ -1,4 +1,4 @@
-@if (isVisible) {
+@if (isVisible()) {
   <div class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
     <div class="absolute inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity" (click)="onCancel()"></div>
     
@@ -11,9 +11,9 @@
             </svg>
           </div>
           <div>
-            <h3 class="text-xl font-semibold text-gray-900">{{ title }}</h3>
+            <h3 class="text-xl font-semibold text-gray-900">{{ title() }}</h3>
             <p class="text-sm text-gray-500 mt-2">
-              {{ message }}
+              {{ message() }}
             </p>
           </div>
         </div>
@@ -24,13 +24,13 @@
           (click)="onCancel()"
           class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 active:scale-95 transition-all duration-150"
         >
-          {{ cancelText }}
+          {{ cancelText() }}
         </button>
         <button 
           (click)="onConfirm()"
           class="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-xl hover:bg-red-700 active:scale-95 transition-all duration-150 shadow-sm shadow-red-100"
         >
-          {{ confirmText }}
+          {{ confirmText() }}
         </button>
       </div>
     </div>

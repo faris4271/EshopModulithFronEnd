@@ -16,17 +16,16 @@ export const routes: Routes = [
   {
     path: '',
     component: LayoutComponent,
+    canActivateChild: [authGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/dashboard/dashboard.component').then((m) => m.DashboardComponent),
       },
       {
         path: 'products',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/products/product-list/product-list.component').then(
             (m) => m.ProductListComponent,
@@ -34,48 +33,41 @@ export const routes: Routes = [
       },
       {
         path: 'products/add',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/products/product-add/product-add.component').then(
             (m) => m.ProductAddComponent,
           ),
       },
-       {
-         path: 'products/edit/:id',
-          canActivate:[authGuard],
-         loadComponent: () =>
-           import('./pages/products/product-add/product-add.component').then(
-             (m) => m.ProductAddComponent,
-           ),
-       },
-       {
-         path: 'vendors',
-          canActivate:[authGuard],
-         loadComponent: () =>
-           import('./pages/vendors/vendor-list/vendor-list.component').then(
-             (m) => m.VendorListComponent,
-           ),
-       },
-       {
-         path: 'vendors/add',
-         canActivate:[authGuard],
-         loadComponent: () =>
-           import('./pages/vendors/vendor-add/vendor-add.component').then(
-             (m) => m.VendorAddComponent,
-           ),
-       },
-       {
-         path: 'vendors/edit/:id',
-         canActivate:[authGuard],
-         loadComponent: () =>
-           import('./pages/vendors/vendor-add/vendor-add.component').then(
-             (m) => m.VendorAddComponent,
-           ),
-       },
-       {
-         path: 'categories',
-
-        canActivate:[authGuard],
+      {
+        path: 'products/edit/:id',
+        loadComponent: () =>
+          import('./pages/products/product-add/product-add.component').then(
+            (m) => m.ProductAddComponent,
+          ),
+      },
+      {
+        path: 'vendors',
+        loadComponent: () =>
+          import('./pages/vendors/vendor-list/vendor-list.component').then(
+            (m) => m.VendorListComponent,
+          ),
+      },
+      {
+        path: 'vendors/add',
+        loadComponent: () =>
+          import('./pages/vendors/vendor-add/vendor-add.component').then(
+            (m) => m.VendorAddComponent,
+          ),
+      },
+      {
+        path: 'vendors/edit/:id',
+        loadComponent: () =>
+          import('./pages/vendors/vendor-edit/vendor-edit.component').then(
+            (m) => m.VendorEditComponent,
+          ),
+      },
+      {
+        path: 'categories',
         loadComponent: () =>
           import('./pages/categories/category-list/category-list.component').then(
             (m) => m.CategoryListComponent,
@@ -83,7 +75,6 @@ export const routes: Routes = [
       },
       {
         path: 'categories/add',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/categories/category-add/category-add.component').then(
             (m) => m.CategoryAddComponent,
@@ -91,7 +82,6 @@ export const routes: Routes = [
       },
       {
         path: 'categories/edit/:id',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/categories/category-edit/category-edit.component').then(
             (m) => m.CategoryEditComponent,
@@ -99,7 +89,6 @@ export const routes: Routes = [
       },
       {
         path: 'brands',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/brands/brand-list/brand-list.component').then(
             (m) => m.BrandListComponent,
@@ -107,13 +96,11 @@ export const routes: Routes = [
       },
       {
         path: 'brands/add',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/brands/brand-add/brand-add.component').then((m) => m.BrandAddComponent),
       },
       {
         path: 'brands/edit/:id',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/brands/brand-edit/brand-edit.component').then(
             (m) => m.BrandEditComponent,
@@ -121,7 +108,6 @@ export const routes: Routes = [
       },
       {
         path: 'product-options',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/product-options/product-option-list/product-option-list.component').then(
             (m) => m.ProductOptionListComponent,
@@ -129,7 +115,6 @@ export const routes: Routes = [
       },
       {
         path: 'product-options/add',
-         canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/product-options/product-option-add/product-option-add.component').then(
             (m) => m.ProductOptionAddComponent,
@@ -151,7 +136,6 @@ export const routes: Routes = [
       },
       {
         path: 'attributes/templates',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/attributes/product-attribute-template-list/product-attribute-template-list.component').then(
             (m) => m.ProductAttributeTemplateListComponent,
@@ -159,7 +143,6 @@ export const routes: Routes = [
       },
       {
         path: 'attributes/templates/add',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/attributes/product-attribute-template-add/product-attribute-template-add.component').then(
             (m) => m.ProductAttributeTemplateAddComponent,
@@ -167,7 +150,6 @@ export const routes: Routes = [
       },
       {
         path: 'attributes/templates/edit/:id',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/attributes/product-attribute-template-edit/product-attribute-template-edit.component').then(
             (m) => m.ProductAttributeTemplateEditComponent,
@@ -175,36 +157,32 @@ export const routes: Routes = [
       },
       {
         path: 'attributes/add',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/attributes/product-attribute-add/product-attribute-add.component').then(
             (m) => m.ProductAttributeAddComponent,
           ),
       },
-        {
-          path: 'attribute-groups',
-          loadComponent: () =>
-            import('./pages/attributes/attribute-group-list/attribute-group-list.component').then(
-              (m) => m.AttributeGroupListComponent,
-            ),
-        },
-        {
-          path: 'attribute-groups/add',
-          canActivate: [authGuard],
-          loadComponent: () =>
-            import('./pages/attributes/attribute-group-add/attribute-group-add.component').then(
-              (m) => m.AttributeGroupAddComponent,
-            ),
-        },
-        {
-          path: 'attribute-groups/edit/:id',
-          canActivate: [authGuard],
-          loadComponent: () =>
-            import('./pages/attributes/attribute-group-edit/attribute-group-edit.component').then(
-              (m) => m.AttributeGroupEditComponent,
-            ),
-        },
-
+      {
+        path: 'attribute-groups',
+        loadComponent: () =>
+          import('./pages/attributes/attribute-group-list/attribute-group-list.component').then(
+            (m) => m.AttributeGroupListComponent,
+          ),
+      },
+      {
+        path: 'attribute-groups/add',
+        loadComponent: () =>
+          import('./pages/attributes/attribute-group-add/attribute-group-add.component').then(
+            (m) => m.AttributeGroupAddComponent,
+          ),
+      },
+      {
+        path: 'attribute-groups/edit/:id',
+        loadComponent: () =>
+          import('./pages/attributes/attribute-group-edit/attribute-group-edit.component').then(
+            (m) => m.AttributeGroupEditComponent,
+          ),
+      },
       {
         path: 'orders',
         loadComponent: () =>
@@ -226,36 +204,15 @@ export const routes: Routes = [
             (m) => m.CustomerListComponent,
           ),
       },
-
-      {   path: 'login',
+      {
+        path: 'profile',
         loadComponent: () =>
-          import('./pages/auth/login/login.component').then(
-            (m) => m.LoginComponent,
-          ),
-      },
-       {   path: 'register',
-        loadComponent: () =>
-          import('./pages/auth/register/register.component').then(
-            (m) => m.RegisterComponent,
-          ),
-      },
-       {
-         path: 'profile',
-         canActivate:[authGuard],
-         loadComponent: () =>
-           import('./pages/profile/user-profile/user-profile.component').then(
-             (m) => m.UserProfileComponent,
-           ),
-       },
-       {
-         path: 'site/settings',
-        loadComponent: () =>
-          import('./shared/placeholder/placeholder.component').then(
-            (m) => m.PlaceholderComponent,
+          import('./pages/profile/user-profile/user-profile.component').then(
+            (m) => m.UserProfileComponent,
           ),
       },
       {
-        path: 'site/store-info',
+        path: 'site/settings',
         loadComponent: () =>
           import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
@@ -263,7 +220,6 @@ export const routes: Routes = [
       },
       {
         path: 'inventory/stock',
-        canActivate:[authGuard],
         loadComponent: () =>
           import('./pages/inventory/stock-list/stock-list.component').then(
             (m) => m.StockListComponent,
@@ -276,11 +232,11 @@ export const routes: Routes = [
             (m) => m.PlaceholderComponent,
           ),
       },
-      {
-        path: 'promotions/coupons',
+{
+        path: 'promotions/cart-rule-usages',
         loadComponent: () =>
-          import('./shared/placeholder/placeholder.component').then(
-            (m) => m.PlaceholderComponent,
+          import('./pages/cart-rule-usages/cart-rule-usage-list/cart-rule-usage-list.component').then(
+            (m) => m.CartRuleUsageListComponent,
           ),
       },
       {
@@ -288,6 +244,34 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
+          ),
+      },
+      {
+        path: 'promotions/cart-price-rules',
+        loadComponent: () =>
+          import('./pages/cart-price-rules/cart-price-rule-list/cart-price-rule-list.component').then(
+            (m) => m.CartPriceRuleListComponent,
+          ),
+      },
+      {
+        path: 'promotions/cart-price-rules/add',
+        loadComponent: () =>
+          import('./pages/cart-price-rules/cart-price-rule-add/cart-price-rule-add.component').then(
+            (m) => m.CartPriceRuleAddComponent,
+          ),
+      },
+      {
+        path: 'promotions/cart-price-rules/edit/:id',
+        loadComponent: () =>
+          import('./pages/cart-price-rules/cart-price-rule-add/cart-price-rule-add.component').then(
+            (m) => m.CartPriceRuleAddComponent,
+          ),
+      },
+      {
+        path: 'promotions/cart-rule-usages',
+        loadComponent: () =>
+          import('./pages/cart-rule-usages/cart-rule-usage-list/cart-rule-usage-list.component').then(
+            (m) => m.CartRuleUsageListComponent,
           ),
       },
       {
@@ -304,13 +288,14 @@ export const routes: Routes = [
             (m) => m.PlaceholderComponent,
           ),
       },
-      {
-        path: 'system/users',
-        loadComponent: () =>
-          import('./shared/placeholder/placeholder.component').then(
-            (m) => m.PlaceholderComponent,
-          ),
-      },
+       {
+         path: 'system/users',
+         loadComponent: () =>
+           import('./pages/users/user-list/user-list.component').then(
+             (m) => m.UserListComponent,
+           ),
+       },
+
       {
         path: 'system/settings',
         loadComponent: () =>
@@ -325,6 +310,28 @@ export const routes: Routes = [
             (m) => m.PlaceholderComponent,
           ),
       },
+      {
+        path: 'system/tax-classes',
+        loadComponent: () =>
+          import('./pages/tax-classes/tax-class-list/tax-class-list.component').then(
+            (m) => m.TaxClassListComponent,
+          ),
+      },
+      {
+        path: 'system/tax-classes/add',
+        loadComponent: () =>
+          import('./pages/tax-classes/tax-class-add/tax-class-add.component').then(
+            (m) => m.TaxClassAddComponent,
+          ),
+      },
+      {
+        path: 'system/tax-classes/edit/:id',
+        loadComponent: () =>
+          import('./pages/tax-classes/tax-class-edit/tax-class-edit.component').then(
+            (m) => m.TaxClassEditComponent,
+          ),
+      },
     ],
   },
+
 ];

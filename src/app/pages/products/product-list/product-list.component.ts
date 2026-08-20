@@ -1,6 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../../services/product.service';
 import {
   ProductItem,
@@ -8,11 +8,14 @@ import {
 import { SmartTableParam } from '../../../models/SmartTableParam';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [CommonModule, FormsModule,RouterModule, PaginationComponent, ConfirmationDialogComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css',
 })
@@ -35,6 +38,7 @@ export class ProductListComponent {
   pageSize = signal(10);
   totalRecords = signal(0);
   selectedIds = signal<Set<string>>(new Set());
+  productToDelete = signal<ProductItem | null>(null);
 
   private searchTerm$ = new Subject<string>();
 
@@ -95,17 +99,6 @@ export class ProductListComponent {
     });
   }
 
-  totalPages = computed(() => Math.ceil(this.totalRecords() / this.pageSize()));
-  pageNumbers = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
-    const start = Math.max(1, current - 2);
-    const end = Math.min(total, current + 2);
-    for (let i = start; i <= end; i++) pages.push(i);
-    return pages;
-  });
-
   allSelected = computed(() => {
     const ids = this.selectedIds();
     const products = this.allProducts();
@@ -122,7 +115,6 @@ export class ProductListComponent {
   }
 
   toggleSelectAll(): void {
-    const ids = this.selectedIds();
     const pageProducts = this.allProducts();
     if (this.allSelected()) {
       this.selectedIds.set(new Set());
@@ -131,12 +123,22 @@ export class ProductListComponent {
     }
   }
 
-  deleteProduct(id: string): void {
-    if (confirm('Are you sure you want to delete this product?')) {
-      this.productService.deleteProduct(id as any).subscribe(() => {
+  deleteProduct(product: ProductItem): void {
+    this.productToDelete.set(product);
+  }
+
+  confirmDelete(): void {
+    const product = this.productToDelete();
+    if (product) {
+      this.productService.deleteProduct(product.id as any).subscribe(() => {
         this.loadProducts();
+        this.cancelDelete();
       });
     }
+  }
+
+  cancelDelete(): void {
+    this.productToDelete.set(null);
   }
 
   /**
@@ -152,6 +154,4 @@ export class ProductListComponent {
       error: () => this.loadProducts()
     });
   }
-
-
 }

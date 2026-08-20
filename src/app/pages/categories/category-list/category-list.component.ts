@@ -2,17 +2,19 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/category.model';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, ConfirmationDialogComponent],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.css',
 })
 export class CategoryListComponent implements OnInit {
   private categoryService = inject(CategoryService);
   categories = signal<Category[]>([]);
+  categoryToDelete = signal<Category | null>(null);
 
   ngOnInit(): void {
     this.categoryService.getCategories().subscribe({
@@ -45,18 +47,27 @@ export class CategoryListComponent implements OnInit {
     return map[color] || 'text-gray-600';
   }
 
-  deleteCategory(id: string): void {
-    if (!window.confirm('Are you sure you want to delete this category?')) {
-      return;
-    }
+  deleteCategory(category: Category): void {
+    this.categoryToDelete.set(category);
+  }
 
-    this.categoryService.deleteCategory(id).subscribe({
-      next: () => {
-        this.categories.update((prev) => prev.filter((c) => c.id !== id));
-      },
-      error: (err) => {
-        alert('Failed to delete category: ' + err.message);
-      },
-    });
+  confirmDelete(): void {
+    const category = this.categoryToDelete();
+    if (category) {
+      this.categoryService.deleteCategory(category.id).subscribe({
+        next: () => {
+          this.categories.update((prev) => prev.filter((c) => c.id !== category.id));
+          this.cancelDelete();
+        },
+        error: (err) => {
+          alert('Failed to delete category: ' + err.message);
+          this.cancelDelete();
+        },
+      });
+    }
+  }
+
+  cancelDelete(): void {
+    this.categoryToDelete.set(null);
   }
 }

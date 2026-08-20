@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
   templateUrl: './confirmation-dialog.component.html',
 })
 export class ConfirmationDialogComponent {
-  @Input() title: string = 'Are you sure?';
-  @Input() message: string = 'This action cannot be undone.';
-  @Input() confirmText: string = 'Confirm';
-  @Input() cancelText: string = 'Cancel';
-  @Input() isVisible: boolean = false;
+  title = input('Are you sure?');
+  message = input('This action cannot be undone.');
+  confirmText = input('Confirm');
+  cancelText = input('Cancel');
+  isVisible = input(false);
 
-  @Output() confirm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  confirm = output<void>();
+  cancel = output<void>();
 
   onConfirm(): void {
     this.confirm.emit();

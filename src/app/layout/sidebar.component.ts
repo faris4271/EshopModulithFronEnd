@@ -32,8 +32,10 @@ export class SidebarComponent {
        children: [
          { label: 'Settings', route: '/site/settings' },
          { label: 'Store Info', route: '/site/store-info' },
-         { label: 'Vendors', route: '/vendors' },
-       ],
+          { label: 'Vendors', route: '/vendors' },
+          { label: 'Users', route: '/system/users' },
+        ],
+
 
     },
     {
@@ -70,8 +72,8 @@ export class SidebarComponent {
       label: 'Promotions',
       icon: 'promotions',
       children: [
-        { label: 'Coupons', route: '/promotions/coupons' },
-        { label: 'Discounts', route: '/promotions/discounts' },
+        { label: 'Cart Price Rules', route: '/promotions/cart-price-rules' },
+        { label: 'Cart Rule Usages', route: '/promotions/cart-rule-usages' },
       ],
     },
     {
@@ -82,11 +84,13 @@ export class SidebarComponent {
         { label: 'Banners', route: '/content/banners' },
       ],
     },
+
     {
       label: 'System',
       icon: 'system',
       children: [
         { label: 'Users', route: '/system/users' },
+        { label: 'Tax Classes', route: '/system/tax-classes' },
         { label: 'Settings', route: '/system/settings' },
         { label: 'Logs', route: '/system/logs' },
       ],

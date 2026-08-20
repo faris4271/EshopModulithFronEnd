@@ -51,7 +51,8 @@ export const refreshTokenInterceptor: HttpInterceptorFn = (req, next) => {
           catchError((refreshErr) => {
             isRefreshing = false;
             refreshTokenSubject.next(false); 
-            authService.logout();
+            authService.AuthenticationSignal.set(false);
+            authService.logout().subscribe({ error: () => {} });
             return throwError(() => refreshErr);
           })
         );

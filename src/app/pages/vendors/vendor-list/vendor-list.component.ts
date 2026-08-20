@@ -1,16 +1,18 @@
 import { Component, inject, signal, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { VendorService } from '../../../services/vendor.service';
 import { VendorItem } from '../../../models/vendor.model';
 import { SmartTableParam } from '../../../models/SmartTableParam';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog/confirmation-dialog.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-vendor-list',
   standalone: true,
-  imports: [RouterLink, CommonModule],
+  imports: [CommonModule,RouterModule, PaginationComponent, ConfirmationDialogComponent],
   templateUrl: './vendor-list.component.html',
   styleUrl: './vendor-list.component.css',
 })
@@ -30,6 +32,8 @@ export class VendorListComponent {
   pageSize = signal(10);
   totalRecords = signal(0);
   selectedIds = signal<Set<string>>(new Set());
+  vendorToDelete = signal<VendorItem | null>(null);
+  isBulkDelete = signal(false);
 
   private searchTerm$ = new Subject<string>();
 
@@ -87,17 +91,6 @@ export class VendorListComponent {
     });
   }
 
-  totalPages = computed(() => Math.ceil(this.totalRecords() / this.pageSize()));
-  pageNumbers = computed(() => {
-    const total = this.totalPages();
-    const current = this.currentPage();
-    const pages: number[] = [];
-    const start = Math.max(1, current - 2);
-    const end = Math.min(total, current + 2);
-    for (let i = start; i <= end; i++) pages.push(i);
-    return pages;
-  });
-
   allSelected = computed(() => {
     const ids = this.selectedIds();
     const vendors = this.allVendors();
@@ -113,13 +106,49 @@ export class VendorListComponent {
     });
   }
 
-  toggleSelectAll(): void {
-    const ids = this.selectedIds();
-    const pageVendors = this.allVendors();
+  toggleAllSelect(): void {
     if (this.allSelected()) {
       this.selectedIds.set(new Set());
     } else {
-      this.selectedIds.set(new Set(pageVendors.map((v) => v.id)));
+      const allIds = this.allVendors().map(v => v.id);
+      this.selectedIds.set(new Set(allIds));
     }
+  }
+
+  deleteVendor(vendor: VendorItem): void {
+    this.vendorToDelete.set(vendor);
+    this.isBulkDelete.set(false);
+  }
+
+  deleteSelected(): void {
+    if (this.selectedIds().size > 0) {
+      this.isBulkDelete.set(true);
+      this.vendorToDelete.set(null);
+    }
+  }
+
+  confirmDelete(): void {
+    if (this.isBulkDelete()) {
+      const ids = Array.from(this.selectedIds());
+      ids.forEach(id => {
+        this.vendorService.deleteVendor(id).subscribe(() => {
+          this.loadVendors();
+        });
+      });
+      this.selectedIds.set(new Set());
+    } else {
+      const vendor = this.vendorToDelete();
+      if (vendor) {
+        this.vendorService.deleteVendor(vendor.id).subscribe(() => {
+          this.loadVendors();
+        });
+      }
+    }
+    this.cancelDelete();
+  }
+
+  cancelDelete(): void {
+    this.vendorToDelete.set(null);
+    this.isBulkDelete.set(false);
   }
 }

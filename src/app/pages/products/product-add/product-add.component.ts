@@ -95,7 +95,7 @@ export class ProductAddComponent implements OnInit {
       next: (data) => this.categories.set(data),
       error: (err) => console.error('Failed to load categories:', err),
     });
-    this.taxClassService.getTaxClasses().subscribe({
+    this.taxClassService.getTaxClassList().subscribe({
       next: (data) => this.taxClasses.set(data),
       error: (err) => console.error('Failed to load tax classes:', err),
     });

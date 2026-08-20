@@ -56,7 +56,7 @@
                 </svg>
               </a>
               <button
-                (click)="deleteCategory(category.id)"
+                (click)="deleteCategory(category)"
                 class="p-1.5 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-red-600 transition-colors"
               >
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,3 +103,11 @@
     }
   </div>
 </div>
+
+<app-confirmation-dialog
+  [isVisible]="!!categoryToDelete()"
+  title="Delete Category?"
+  message="Are you sure you want to delete this category? This action cannot be undone."
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()">
+</app-confirmation-dialog>

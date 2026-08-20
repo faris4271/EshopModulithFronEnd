@@ -1,0 +1,302 @@
+<div class="p-6 max-w-7xl mx-auto">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-4">
+      <button 
+        (click)="router.navigate(['/promotions/cart-price-rules'])" 
+        class="p-2 hover:bg-gray-100 rounded-full transition-colors"
+        aria-label="Go back"
+      >
+        <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+      </button>
+      <h1 class="text-2xl font-bold text-gray-800">
+        {{ isEditing() ? 'Edit Cart Price Rule' : 'Add Cart Price Rule' }}
+      </h1>
+    </div>
+  </div>
+
+  <!-- Tab Navigation -->
+  <div class="flex border-b border-gray-200 mb-6">
+    @for (tab of tabs; track tab.key) {
+      <button 
+        (click)="activeTab.set(tab.key)" 
+        [class.border-indigo-600]="activeTab() === tab.key"
+        [class.text-indigo-600]="activeTab() === tab.key"
+        class="px-6 py-3 text-sm font-medium border-b-2 transition-all hover:text-indigo-600"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+
+  <!-- Form Content -->
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      
+      @if (activeTab() === 'rule') {
+        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Rule Name -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Rule Name <span class="text-red-500">*</span></label>
+            <input 
+              type="text" 
+              formControlName="name" 
+              placeholder="Enter rule name" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('name')"
+            />
+            @if (isFieldInvalid('name')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('name') }}</p>
+            }
+          </div>
+
+          <!-- Rule To Apply -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Discount Type <span class="text-red-500">*</span></label>
+            <select 
+              formControlName="ruleToApply" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('ruleToApply')"
+            >
+              @for (opt of RULE_TO_APPLY_OPTIONS; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+            @if (isFieldInvalid('ruleToApply')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('ruleToApply') }}</p>
+            }
+          </div>
+
+          <!-- Description -->
+          <div class="space-y-2 md:col-span-2">
+            <label class="text-sm font-medium text-gray-700">Description</label>
+            <textarea 
+              formControlName="description" 
+              rows="2" 
+              placeholder="Enter rule description" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            ></textarea>
+          </div>
+
+          <!-- Start Date -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Start Date <span class="text-red-500">*</span></label>
+            <input 
+              type="datetime-local" 
+              formControlName="startOn" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('startOn')"
+            />
+            @if (isFieldInvalid('startOn')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('startOn') }}</p>
+            }
+          </div>
+
+          <!-- End Date -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">End Date <span class="text-red-500">*</span></label>
+            <input 
+              type="datetime-local" 
+              formControlName="endOn" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('endOn')"
+            />
+            @if (isFieldInvalid('endOn')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('endOn') }}</p>
+            }
+          </div>
+
+          <!-- Coupon Required -->
+          <div class="flex items-center gap-3 space-y-0">
+            <input 
+              type="checkbox" 
+              formControlName="isCouponRequired" 
+              id="couponRequired" 
+              class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            />
+            <label for="couponRequired" class="text-sm font-medium text-gray-700">Coupon Required</label>
+          </div>
+
+          <!-- Coupon Code -->
+          @if (form.value.isCouponRequired) {
+            <div class="space-y-2">
+              <label class="text-sm font-medium text-gray-700">Coupon Code <span class="text-red-500">*</span></label>
+              <input 
+                type="text" 
+                formControlName="couponCode" 
+                placeholder="Enter coupon code" 
+                class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                [class.border-red-500]="isFieldInvalid('couponCode')"
+              />
+              @if (isFieldInvalid('couponCode')) {
+                <p class="text-xs text-red-500">{{ getErrorMessage('couponCode') }}</p>
+              }
+            </div>
+          }
+
+          <!-- Amounts -->
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Discount Amount</label>
+            <input 
+              type="number" 
+              formControlName="discountAmount" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('discountAmount')"
+            />
+            @if (isFieldInvalid('discountAmount')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('discountAmount') }}</p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Max Discount Amount</label>
+            <input 
+              type="number" 
+              formControlName="maxDiscountAmount" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('maxDiscountAmount')"
+            />
+            @if (isFieldInvalid('maxDiscountAmount')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('maxDiscountAmount') }}</p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Discount Step</label>
+            <input 
+              type="number" 
+              formControlName="discountStep" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('discountStep')"
+            />
+            @if (isFieldInvalid('discountStep')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('discountStep') }}</p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Usage Limit Per Coupon</label>
+            <input 
+              type="number" 
+              formControlName="usageLimitPerCoupon" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('usageLimitPerCoupon')"
+            />
+            @if (isFieldInvalid('usageLimitPerCoupon')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('usageLimitPerCoupon') }}</p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-sm font-medium text-gray-700">Usage Limit Per Customer</label>
+            <input 
+              type="number" 
+              formControlName="usageLimitPerCustomer" 
+              class="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              [class.border-red-500]="isFieldInvalid('usageLimitPerCustomer')"
+            />
+            @if (isFieldInvalid('usageLimitPerCustomer')) {
+              <p class="text-xs text-red-500">{{ getErrorMessage('usageLimitPerCustomer') }}</p>
+            }
+          </div>
+
+          <div class="flex items-center gap-3 space-y-0">
+            <input 
+              type="checkbox" 
+              formControlName="isActive" 
+              id="isActive" 
+              class="w-4 h-4 text-indigo-600 rounded border-gray-300 focus:ring-indigo-500"
+            />
+            <label for="isActive" class="text-sm font-medium text-gray-700">Active</label>
+          </div>
+        </div>
+      }
+
+      @if (activeTab() === 'products') {
+        <div class="p-6 space-y-6">
+          <div class="flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-gray-800">Selected Products</h3>
+            <button 
+              type="button" 
+              (click)="openSelector()" 
+              class="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-all shadow-sm"
+            >
+              Add Products
+            </button>
+          </div>
+
+          @if (selectedProducts().length > 0) {
+            <div class="overflow-x-auto border border-gray-200 rounded-lg">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product Name</th>
+                    <th class="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Published</th>
+                    <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                  @for (product of selectedProducts(); track product.id) {
+                    <tr class="hover:bg-gray-50 transition-colors">
+                      <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-700 font-medium">
+                        {{ product.name }}
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap text-center">
+                        <span 
+                          class="inline-block w-2.5 h-2.5 rounded-full" 
+                          [class.bg-green-500]="product.isPublished" 
+                          [class.bg-red-500]="!product.isPublished"
+                        ></span>
+                      </td>
+                      <td class="px-4 py-3 whitespace-nowrap text-right">
+                        <button 
+                          type="button" 
+                          (click)="removeProduct(product.id)" 
+                          class="text-red-500 hover:text-red-700 text-sm font-medium transition-colors"
+                        >
+                          Remove
+                        </button>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          } @else {
+            <div class="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg">
+              <p class="text-sm text-gray-500">No products selected. Click "Add Products" to begin.</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-end gap-4">
+      <button 
+        type="button" 
+        (click)="router.navigate(['/promotions/cart-price-rules'])" 
+        class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-all"
+      >
+        Cancel
+      </button>
+      <button 
+        type="submit" 
+        [disabled]="isSubmitting()" 
+        class="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:bg-indigo-400 transition-all shadow-sm"
+      >
+        {{ isSubmitting() ? 'Saving...' : (isEditing() ? 'Update Rule' : 'Save Rule') }}
+      </button>
+    </div>
+  </form>
+
+  <!-- Product Selector Modal -->
+  <app-product-selector 
+    [isOpen]="isSelectorOpen()" 
+    [selectedIds]="selectedProductsIds()" 
+    (toggle)="toggleProduct($event)" 
+    (close)="closeSelector()" 
+  />
+</div>

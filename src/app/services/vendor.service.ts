@@ -24,12 +24,12 @@ export class VendorService {
     return this.http.post(this.apiUrl, { vendorDto: dto });
   }
 
-  getVendorById(id: string): Observable<VendorItem> {
-    return this.http.get<VendorItem>(`${this.apiUrl}/${id}`);
+  getVendorById(id: string): Observable<VendorDto> {
+    return this.http.get<VendorDto>(`${this.apiUrl}/${id}`);
   }
 
   updateVendor(dto: VendorDto): Observable<any> {
-    return this.http.put(`${this.apiUrl}/${dto.id}`, dto);
+    return this.http.put(`${this.apiUrl}/${dto.id}`, { vendorDto: dto });
   }
 
   deleteVendor(id: string): Observable<any> {
