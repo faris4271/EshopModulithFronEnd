@@ -1,0 +1,175 @@
+<div class="space-y-6">
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Page Detail</h1>
+      <p class="text-sm text-gray-500 mt-1">View page information</p>
+    </div>
+    <div class="flex gap-3">
+      <button
+        type="button"
+        (click)="goBack()"
+        class="inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back
+      </button>
+      @if (page()) {
+        <button
+          type="button"
+          (click)="editPage()"
+          class="inline-flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+          </svg>
+          Edit
+        </button>
+      }
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="bg-white rounded-xl border border-gray-200 p-12 text-center">
+      <svg class="animate-spin h-8 w-8 text-indigo-600 mx-auto" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <p class="mt-4 text-gray-500">Loading page...</p>
+    </div>
+  } @else if (error()) {
+    <div class="bg-white rounded-xl border border-gray-200 p-12 text-center">
+      <svg class="w-12 h-12 mx-auto text-red-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+      </svg>
+      <p class="text-gray-500">{{ error() }}</p>
+      <button
+        (click)="goBack()"
+        class="mt-4 inline-flex items-center gap-2 px-4 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+      >
+        Back to List
+      </button>
+    </div>
+  } @else if (page(); as p) {
+    <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <!-- Header Info -->
+      <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-lg bg-indigo-100 flex items-center justify-center">
+            <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <div>
+            <h2 class="text-xl font-bold text-gray-900">{{ p.name }}</h2>
+            <p class="text-sm text-gray-500">{{ p.slug }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Details Grid -->
+      <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Page Type</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.pageType }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Status</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">
+            <span [class]="p.isPublished ? 'text-green-600' : 'text-yellow-600'">
+              {{ p.isPublished ? 'Published' : 'Draft' }}
+            </span>
+          </p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Home Page</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.isHome ? 'Yes' : 'No' }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Sort Order</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.sortOrder }}</p>
+        </div>
+        <div class="md:col-span-2 lg:col-span-2">
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Layout</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.layoutId ? 'Assigned' : 'None' }}</p>
+        </div>
+        <div class="md:col-span-2 lg:col-span-2">
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Featured Image</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.featuredImage || 'None' }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Published On</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.publishedOn ? (p.publishedOn | date:'medium') : 'Never' }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Created</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.createdAt | date:'medium' }}</p>
+        </div>
+        <div>
+          <p class="text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</p>
+          <p class="text-sm font-medium text-gray-900 mt-1">{{ p.updatedAt | date:'medium' }}</p>
+        </div>
+      </div>
+
+      <!-- SEO Section -->
+      <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+        <h3 class="text-lg font-medium text-gray-900 mb-4">SEO Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+          @if (p.metaTitle) {
+            <div>
+              <p class="font-medium text-gray-500">Meta Title</p>
+              <p class="text-gray-900">{{ p.metaTitle }}</p>
+            </div>
+          }
+          @if (p.metaDescription) {
+            <div>
+              <p class="font-medium text-gray-500">Meta Description</p>
+              <p class="text-gray-900">{{ p.metaDescription }}</p>
+            </div>
+          }
+          @if (p.metaKeywords) {
+            <div>
+              <p class="font-medium text-gray-500">Meta Keywords</p>
+              <p class="text-gray-900">{{ p.metaKeywords }}</p>
+            </div>
+          }
+          @if (p.canonicalUrl) {
+            <div>
+              <p class="font-medium text-gray-500">Canonical URL</p>
+              <p class="text-gray-900">{{ p.canonicalUrl }}</p>
+            </div>
+          }
+          @if (p.ogTitle) {
+            <div>
+              <p class="font-medium text-gray-500">OG Title</p>
+              <p class="text-gray-900">{{ p.ogTitle }}</p>
+            </div>
+          }
+          @if (p.ogDescription) {
+            <div>
+              <p class="font-medium text-gray-500">OG Description</p>
+              <p class="text-gray-900">{{ p.ogDescription }}</p>
+            </div>
+          }
+          @if (p.ogImage) {
+            <div>
+              <p class="font-medium text-gray-500">OG Image</p>
+              <p class="text-gray-900">{{ p.ogImage }}</p>
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Blocks/Content Section -->
+      @if (p.content) {
+        <div class="px-6 py-4 border-t border-gray-200">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Page Blocks (JSON)</h3>
+          <div class="bg-gray-100 rounded-lg p-4 max-h-96 overflow-auto">
+            <pre class="text-xs text-gray-700">{{ p.content }}</pre>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

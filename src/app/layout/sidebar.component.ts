@@ -81,7 +81,9 @@ export class SidebarComponent {
       icon: 'content',
       children: [
         { label: 'Pages', route: '/content/pages' },
+        { label: 'Layouts', route: '/content/layouts' },
         { label: 'Banners', route: '/content/banners' },
+        { label: 'Search', route: '/content/search' },
       ],
     },
 

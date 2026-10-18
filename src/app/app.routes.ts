@@ -277,9 +277,22 @@ export const routes: Routes = [
       {
         path: 'content/pages',
         loadComponent: () =>
-          import('./shared/placeholder/placeholder.component').then(
-            (m) => m.PlaceholderComponent,
-          ),
+          import('./pages/content/page-list/page-list.component').then((m) => m.PageListComponent),
+      },
+      {
+        path: 'content/pages/add',
+        loadComponent: () =>
+          import('./pages/content/page-editor/page-editor.component').then((m) => m.PageEditorComponent),
+      },
+      {
+        path: 'content/pages/edit/:id',
+        loadComponent: () =>
+          import('./pages/content/page-editor/page-editor.component').then((m) => m.PageEditorComponent),
+      },
+      {
+        path: 'content/pages/:id',
+        loadComponent: () =>
+          import('./pages/content/page-detail/page-detail.component').then((m) => m.PageDetailComponent),
       },
       {
         path: 'content/banners',
@@ -287,6 +300,31 @@ export const routes: Routes = [
           import('./shared/placeholder/placeholder.component').then(
             (m) => m.PlaceholderComponent,
           ),
+      },
+      {
+        path: 'content/layouts',
+        loadComponent: () =>
+          import('./pages/content/layout-list/layout-list.component').then((m) => m.LayoutListComponent),
+      },
+      {
+        path: 'content/layouts/add',
+        loadComponent: () =>
+          import('./pages/content/layout-editor/layout-editor.component').then((m) => m.LayoutEditorComponent),
+      },
+      {
+        path: 'content/layouts/edit/:id',
+        loadComponent: () =>
+          import('./pages/content/layout-editor/layout-editor.component').then((m) => m.LayoutEditorComponent),
+      },
+      {
+        path: 'content/layouts/:id',
+        loadComponent: () =>
+          import('./pages/content/layout-detail/layout-detail.component').then((m) => m.LayoutDetailComponent),
+      },
+      {
+        path: 'content/search',
+        loadComponent: () =>
+          import('./pages/content/search-page/search-page.component').then((m) => m.SearchPageComponent),
       },
        {
          path: 'system/users',

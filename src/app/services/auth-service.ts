@@ -59,4 +59,9 @@ export class AuthService {
       return false;
     }
   }
+
+  clearAuthState(): void {
+    this.AuthenticationSignal.set(false);
+    this.currentUser.set(null);
+  }
 }

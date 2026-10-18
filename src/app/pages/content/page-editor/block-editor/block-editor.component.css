@@ -1,0 +1,20 @@
+/* Block Editor Component Styles */
+
+.cdk-drag-preview {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  transform: rotate(3deg);
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.5;
+  background: #e0e7ff;
+  border: 2px dashed #6366f1;
+}
+
+.block-editor .cdk-drag-handle {
+  touch-action: none;
+}

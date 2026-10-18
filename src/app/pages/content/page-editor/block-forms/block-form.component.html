@@ -1,0 +1,321 @@
+<div class="space-y-4">
+  @switch (blockType()) {
+    @case ('Hero') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Hero Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Heading <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              formControlName="heading"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Main heading"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Subheading</label>
+            <input
+              type="text"
+              formControlName="subheading"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Supporting text"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Background Image URL</label>
+            <input
+              type="url"
+              formControlName="backgroundImage"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://example.com/bg.jpg"
+            />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">CTA Text <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                formControlName="ctaText"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Get Started"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">CTA Link <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                formControlName="ctaLink"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="/contact"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('Banner') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Banner Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Image URL <span class="text-red-500">*</span></label>
+            <input
+              type="url"
+              formControlName="image"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://example.com/banner.jpg"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Alt Text</label>
+            <input
+              type="text"
+              formControlName="altText"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Banner description"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Link</label>
+            <input
+              type="text"
+              formControlName="link"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://example.com"
+            />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Width (px)</label>
+              <input
+                type="number"
+                formControlName="width"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="1200"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Height (px)</label>
+              <input
+                type="number"
+                formControlName="height"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="400"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('Text') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Text Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">HTML Content <span class="text-red-500">*</span></label>
+            <textarea
+              formControlName="htmlContent"
+              rows="6"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono"
+              placeholder="<p>Your content here</p>"
+            ></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Alignment <span class="text-red-500">*</span></label>
+            <select formControlName="alignment" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('ImageGallery') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Image Gallery Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Images JSON Array <span class="text-red-500">*</span></label>
+            <textarea
+              formControlName="images"
+              rows="8"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+              placeholder='[{"url": "https://example.com/img1.jpg", "alt": "Image 1", "caption": "Caption 1"}]'
+            ></textarea>
+            <p class="text-xs text-gray-500 mt-1">Format: [&#123;url, alt, caption?&#125;]</p>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('ProductGrid') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Product Grid Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Product IDs (JSON Array) <span class="text-red-500">*</span></label>
+            <textarea
+              formControlName="productIds"
+              rows="4"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+              placeholder='["prod-1", "prod-2", "prod-3"]'
+            ></textarea>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Columns <span class="text-red-500">*</span></label>
+              <select formControlName="columns" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+            <div class="flex items-center gap-3 mt-6">
+              <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" formControlName="showPrices" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+                <span class="text-sm text-gray-700">Show Prices</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('Cta') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Call to Action Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Heading <span class="text-red-500">*</span></label>
+            <input
+              type="text"
+              formControlName="heading"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Ready to get started?"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Subheading</label>
+            <input
+              type="text"
+              formControlName="subheading"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="Join thousands of users today"
+            />
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Button Text <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                formControlName="buttonText"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="Sign Up Free"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Button Link <span class="text-red-500">*</span></label>
+              <input
+                type="text"
+                formControlName="buttonLink"
+                class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="/signup"
+              />
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Style <span class="text-red-500">*</span></label>
+            <select formControlName="style" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <option value="primary">Primary</option>
+              <option value="secondary">Secondary</option>
+              <option value="outline">Outline</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('Video') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Video Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Video URL <span class="text-red-500">*</span></label>
+            <input
+              type="url"
+              formControlName="videoUrl"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://youtube.com/watch?v=... or https://example.com/video.mp4"
+            />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Poster Image URL</label>
+            <input
+              type="url"
+              formControlName="posterImage"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://example.com/poster.jpg"
+            />
+          </div>
+          <div class="flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" formControlName="autoplay" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+              <span class="text-sm text-gray-700">Autoplay</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    }
+
+    @case ('CustomHtml') {
+      <div>
+        <h4 class="text-sm font-medium text-gray-900 mb-3">Custom HTML Block</h4>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">HTML Content <span class="text-red-500">*</span></label>
+            <textarea
+              formControlName="htmlContent"
+              rows="10"
+              class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-gray-50"
+              placeholder='<div class="custom">Your custom HTML</div>'
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    }
+
+    @default {
+      <div class="text-center py-8 text-gray-500">
+        <svg class="w-12 h-12 mx-auto text-gray-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <p>Select a block type to edit</p>
+      </div>
+    }
+  }
+
+  <div class="flex gap-3 pt-4 border-t border-gray-200">
+    <button
+      type="button"
+      (click)="onSubmit()"
+      class="flex-1 px-4 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
+    >
+      Save Block
+    </button>
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="px-4 py-2.5 border border-gray-300 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+    >
+      Cancel
+    </button>
+  </div>
+</div>

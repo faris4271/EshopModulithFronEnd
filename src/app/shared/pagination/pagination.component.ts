@@ -1,10 +1,11 @@
-import { Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-pagination',
   standalone: true,
   imports: [CommonModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
       <div class="text-sm text-gray-500">
@@ -18,7 +19,7 @@ import { CommonModule } from '@angular/common';
         >
           Previous
         </button>
-        @for (page of visiblePages(); track page) {
+        @for (page of visiblePages(); track $index) {
           <button
             (click)="goToPage(page)"
             [class.bg-indigo-600 text-white]="page === currentPage()"
@@ -50,18 +51,14 @@ export class PaginationComponent {
 
   // Computed
   totalPages = computed(() => {
-    const pages = Math.ceil(this.totalItems() / this.itemsPerPage());
-    return Math.max(1, pages); // Always return at least 1 page
+    const size = Math.max(1, this.itemsPerPage());
+    const raw = Math.ceil(this.totalItems() / size);
+    return Number.isFinite(raw) && raw > 0 ? raw : 1;
   });
   visiblePages = computed(() => {
     const total = this.totalPages();
-    const current = this.currentPage();
-    const maxVisible = this.maxVisiblePages();
-
-    // Always show at least page 1, even when there are no records
-    if (total === 0) {
-      return [1];
-    }
+    const maxVisible = Math.max(1, this.maxVisiblePages());
+    const current = Math.max(1, Math.min(this.currentPage(), total));
 
     let start = Math.max(1, current - Math.floor(maxVisible / 2));
     let end = Math.min(total, start + maxVisible - 1);
@@ -75,12 +72,18 @@ export class PaginationComponent {
 
   // Helpers
   startItem = computed(() => {
-    if (this.totalItems() === 0) return 0;
-    return (this.currentPage() - 1) * this.itemsPerPage() + 1;
+    const total = this.totalItems();
+    if (!Number.isFinite(total) || total <= 0) return 0;
+    const size = Math.max(1, this.itemsPerPage());
+    const current = Math.max(1, this.currentPage());
+    return (current - 1) * size + 1;
   });
   endItem = computed(() => {
-    if (this.totalItems() === 0) return 0;
-    return Math.min(this.currentPage() * this.itemsPerPage(), this.totalItems());
+    const total = this.totalItems();
+    if (!Number.isFinite(total) || total <= 0) return 0;
+    const size = Math.max(1, this.itemsPerPage());
+    const current = Math.max(1, this.currentPage());
+    return Math.min(current * size, total);
   });
 
   // Methods
